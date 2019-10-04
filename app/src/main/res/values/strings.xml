@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">House Cleaning</string>
+    <string name="hint_email">Digite seu email</string>
+    <string name="texto_btn_login">entrar</string>
+    <string name="entrar_google">entrar com google</string>
+    <string name="texto_esqueceu_senha">Esqueceu sua senha?</string>
+    <string name="texto_clique_aqui">clique aqui</string>
+    <string name="texto_recuperar_senha">recuperar</string>
+    <string name="texto_nao_possui_conta">Ainda não possui uma conta?</string>
+    <string name="texto_ir_para_cadastro">ir para cadastro</string>
 </resources>
