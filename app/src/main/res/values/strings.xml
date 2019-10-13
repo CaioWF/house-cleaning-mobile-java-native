@@ -8,4 +8,11 @@
     <string name="texto_recuperar_senha">recuperar</string>
     <string name="texto_nao_possui_conta">Ainda não possui uma conta?</string>
     <string name="texto_ir_para_cadastro">ir para cadastro</string>
+    <string name="registrar_google">registrar com Google</string>
+    <string name="texto_ja_possui_conta">Já possui uma conta?</string>
+    <string name="texto_ir_para_login">ir para login</string>
+    <string name="texto_btn_registrar">registrar</string>
+    <string name="hint_name">Digite seu nome</string>
+    <string name="confirm_registration">Ao marcar você concorda com nossos Termos de Uso e Políticas de Privacidade.</string>
+
 </resources>

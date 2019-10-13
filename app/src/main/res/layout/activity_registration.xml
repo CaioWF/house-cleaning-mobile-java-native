@@ -21,12 +21,23 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:id="@+id/imageView"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
+                android:layout_toRightOf="@+id/id_name_registration"
                 android:layout_weight="1"
-                app:srcCompat="@mipmap/ic_logo" />
+                app:srcCompat="@drawable/ic_person_green_24dp" />
+
+            <EditText
+                android:id="@+id/id_name_registration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/hint_name"
+                android:inputType="textEmailAddress"
+                android:textColorHint="@color/colorPrimaryDark" />
         </LinearLayout>
 
         <LinearLayout
@@ -35,7 +46,30 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imageView2"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_toRightOf="@+id/id_endereco_registration"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_add_location_black_24dp" />
+
+            <Spinner
+                android:id="@+id/spinner_endereco_registration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:prompt="@string/app_name" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView3"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
@@ -85,25 +119,15 @@
             android:layout_marginBottom="20dp"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textView3"
+            <CheckBox
+                android:id="@+id/id_chackbox_confirm_registration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="right"
-                android:text="@string/texto_esqueceu_senha"
-                android:textColor="@color/colorPrimaryDark" />
-
-            <Button
-                android:id="@+id/id_btn_recuperar_senha"
-                android:layout_width="0dp"
-                android:layout_height="19dp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:gravity="right"
-                android:text="@string/texto_recuperar_senha"
+                android:text="@string/confirm_registration"
                 android:textColor="@color/colorPrimaryDark"
-                android:textStyle="bold" />
+                android:textSize="14sp" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -117,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorPrimaryDark"
-                android:text="@string/texto_btn_login"
+                android:text="@string/texto_btn_registrar"
                 android:textColor="@android:color/background_light" />
         </LinearLayout>
 
@@ -148,10 +172,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/background_light"
-                android:drawableStart="@drawable/ic_google"
+                android:drawableLeft="@drawable/ic_google"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp"
-                android:text="@string/entrar_google" />
+                android:text="@string/registrar_google" />
         </LinearLayout>
 
         <LinearLayout
@@ -166,7 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/texto_nao_possui_conta" />
+                android:text="@string/texto_ja_possui_conta" />
         </LinearLayout>
 
         <LinearLayout
@@ -175,12 +199,12 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/id_btn_ir_para_cadastro"
+                android:id="@+id/id_btn_ir_para_login"
                 android:layout_width="0dp"
                 android:layout_height="19dp"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-                android:text="@string/texto_ir_para_cadastro"
+                android:text="@string/texto_ir_para_login"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
         </LinearLayout>
