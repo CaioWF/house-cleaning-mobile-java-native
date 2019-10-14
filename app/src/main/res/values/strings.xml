@@ -14,5 +14,6 @@
     <string name="texto_btn_registrar">registrar</string>
     <string name="hint_name">Digite seu nome</string>
     <string name="confirm_registration">Ao marcar você concorda com nossos Termos de Uso e Políticas de Privacidade.</string>
-
+    <string name="abrir_navigation_drawer">Abrir Navigation Drawer</string>
+    <string name="fechar_navigation_drawer">Fechar Navigation Drawer</string>
 </resources>
