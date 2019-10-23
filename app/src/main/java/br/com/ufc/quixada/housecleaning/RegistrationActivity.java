@@ -20,7 +20,7 @@ public class RegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
 
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner_endereco_registration);
+        //Spinner spinner = (Spinner) findViewById(R.id.spinner_endereco_registration);
         //List<String> linguagens = new ArrayList<>(Arrays.asList("Java","Python","PHP","Ruby"));
 
         //ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,

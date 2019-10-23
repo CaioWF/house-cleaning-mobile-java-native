@@ -8,35 +8,26 @@
     android:fitsSystemWindows="true"
     tools:context=".HomeActivity"
     tools:openDrawer="start">
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        
+
         <android.support.v7.widget.Toolbar
+            android:id="@+id/id_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
-            android:id="@+id/id_toolbar"
+            android:elevation="4dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            android:elevation="4dp"/>
-        
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
         <FrameLayout
             android:id="@+id/id_fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-        
-    </LinearLayout>
+            android:layout_height="match_parent" />
 
-    <android.support.design.widget.NavigationView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:id="@+id/id_navigation_view"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/drawer_menu"/>
+    </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>
