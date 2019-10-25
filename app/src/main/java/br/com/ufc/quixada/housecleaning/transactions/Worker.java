@@ -1,4 +1,4 @@
-package br.ufc.quixada.es.housecleaning.transactions;
+package br.com.ufc.quixada.housecleaning.transactions;
 
 public class Worker extends Bean {
 
