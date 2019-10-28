@@ -63,17 +63,22 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        Fragment selectedFragment = null;
         switch (menuItem.getItemId()) {
             case R.id.id_bottom_home:
+                selectedFragment = new WorkerListFragment();
                 break;
             case R.id.id_bottom_workers:
+                selectedFragment = new WorkerListFragment();
                 getSupportActionBar().setTitle("Solicitar Serviço");
-                Fragment workersFragment = WorkerListFragment.newInstance("param1", "param2");
-                openFragment(workersFragment);
+                /*Fragment workersFragment = WorkerListFragment.newInstance("param1", "param2");
+                openFragment(workersFragment);*/
                 break;
             case R.id.id_bottom_requestes:
+                selectedFragment = new WorkerListFragment();
                 break;
         }
+        openFragment(selectedFragment);
         return true;
     }
 
