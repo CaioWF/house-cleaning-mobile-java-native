@@ -8,9 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import br.com.ufc.quixada.housecleaning.dao.WorkerDAO;
 import br.com.ufc.quixada.housecleaning.dao.memory.WorkerMemoryDAO;
-import br.com.ufc.quixada.housecleaning.presenter.EventListener;
+import br.com.ufc.quixada.housecleaning.presenter.WorkerEventListener;
 import br.com.ufc.quixada.housecleaning.transactions.Worker;
 import br.com.ufc.quixada.housecleaning.view.WorkerListView;
 
@@ -22,7 +24,7 @@ import br.com.ufc.quixada.housecleaning.view.WorkerListView;
  * Use the {@link WorkerListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WorkerListFragment extends Fragment implements EventListener<Worker> {
+public class WorkerListFragment extends Fragment implements WorkerEventListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -77,11 +79,10 @@ public class WorkerListFragment extends Fragment implements EventListener<Worker
         workerListView = new WorkerListView();
         workerListView.initialize(view);
 
-        workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
-        workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
-        workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
-        workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
-        workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
+        List<Worker> workers = workerDAO.findAll();
+        for(Worker worker : workers) {
+            workerListView.createWorker(worker);
+        }
 
         return view;
     }
@@ -108,21 +109,6 @@ public class WorkerListFragment extends Fragment implements EventListener<Worker
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onCreate(Worker worker) {
-        workerListView.createWorker(worker);
-    }
-
-    @Override
-    public void onUpdate(Worker worker) {
-
-    }
-
-    @Override
-    public void onDelete(Worker worker) {
-
     }
 
     /**

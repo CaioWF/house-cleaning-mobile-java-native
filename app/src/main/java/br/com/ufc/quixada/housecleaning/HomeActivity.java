@@ -1,19 +1,23 @@
 package br.com.ufc.quixada.housecleaning;
 
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import br.com.ufc.quixada.housecleaning.dao.WorkerDAO;
+import br.com.ufc.quixada.housecleaning.dao.memory.WorkerMemoryDAO;
+import br.com.ufc.quixada.housecleaning.presenter.WorkerEventListener;
+import br.com.ufc.quixada.housecleaning.transactions.Worker;
+
 public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener,
-        WorkerListFragment.OnFragmentInteractionListener {
+        WorkerListFragment.OnFragmentInteractionListener, WorkerEventListener {
 
     private BottomNavigationView bottomNavigationView;
 
@@ -27,6 +31,13 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 
         bottomNavigationView = findViewById(R.id.id_bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
+
+        WorkerDAO workerDAO = WorkerMemoryDAO.getInstance(this);
+        workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
+        workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
+        workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
+        workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
+        workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
     }
 
     @Override
@@ -95,4 +106,5 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     public void onFragmentInteraction(Uri uri) {
 
     }
+
 }

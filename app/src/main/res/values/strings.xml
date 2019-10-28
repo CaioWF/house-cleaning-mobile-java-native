@@ -19,4 +19,19 @@
     <string name="menu_configuracao">Configurações</string>
     <string name="menu_sobre">Sobre</string>
     <string name="menu_sair">Sair</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cleaning_service_description_field">Descrição</string>
+    <string name="cleaning_service_label">Solicitar Limpeza</string>
+    <string name="cleaning_service_place_field">Cidade, Bairro</string>
+    <string name="cleaning_service_street_field">Rua</string>
+    <string name="cleaning_service_number_field">Número</string>
+    <string name="cleaning_service_complement_field">Complemento</string>
+    <string name="cleaning_service_save_button">Salvar</string>
+    <string name="cleaning_service_cancel_button">Cancelar</string>
+    <string name="cleaning_service_date_field">Data</string>
+    <string name="cleaning_service_time_field">Horário</string>
+    <string name="cleaning_service_datetime_field" >Data e Horário</string>
+    <string name="cleaning_service_area_size_field">Tamanho da Área de Limpeza em m²</string>
+    <string name="cleaning_service_additional_comments_field">Comentários Adicionais</string>
 </resources>
