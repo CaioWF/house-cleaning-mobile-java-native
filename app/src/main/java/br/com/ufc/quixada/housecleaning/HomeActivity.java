@@ -67,6 +67,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         switch (menuItem.getItemId()) {
             case R.id.id_bottom_home:
                 selectedFragment = new WorkerListFragment();
+                getSupportActionBar().setTitle("House Cleaning");
                 break;
             case R.id.id_bottom_workers:
                 selectedFragment = new WorkerListFragment();
@@ -76,18 +77,19 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
                 break;
             case R.id.id_bottom_requestes:
                 selectedFragment = new WorkerListFragment();
+                getSupportActionBar().setTitle("Solicitações de Serviço");
                 break;
         }
-        openFragment(selectedFragment);
+        getSupportFragmentManager().beginTransaction().replace(R.id.id_fragment_container, selectedFragment).commit();
         return true;
     }
 
-    private void openFragment(Fragment fragment) {
+    /*private void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.id_fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
-    }
+    }*/
 
     @Override
     public void onFragmentInteraction(Uri uri) {
