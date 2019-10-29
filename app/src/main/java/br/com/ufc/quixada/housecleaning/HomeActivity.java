@@ -1,7 +1,5 @@
 package br.com.ufc.quixada.housecleaning;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,20 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.SearchView;
 
-import br.com.ufc.quixada.housecleaning.dao.CleaningServiceDAO;
-import br.com.ufc.quixada.housecleaning.dao.WorkerDAO;
-import br.com.ufc.quixada.housecleaning.dao.memory.CleaningServiceMemoryDAO;
-import br.com.ufc.quixada.housecleaning.dao.memory.WorkerMemoryDAO;
 import br.com.ufc.quixada.housecleaning.presenter.CleaningServiceEventListener;
-import br.com.ufc.quixada.housecleaning.presenter.WorkerEventListener;
-import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
-import br.com.ufc.quixada.housecleaning.transactions.Worker;
+import br.com.ufc.quixada.housecleaning.presenter.UserEventListener;
 
 public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener,
-        WorkerListFragment.OnFragmentInteractionListener, WorkerEventListener,
-        HistoryFragment.OnFragmentInteractionListener, CleaningServiceEventListener {
+        WorkerListFragment.OnFragmentInteractionListener, UserEventListener,
+        HistoryFragment.OnFragmentInteractionListener, CleaningServiceSolicitationFragment.OnFragmentInteractionListener, CleaningServiceEventListener {
 
     private BottomNavigationView bottomNavigationView;
 
@@ -41,20 +32,6 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 
         bottomNavigationView = findViewById(R.id.id_bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-
-        WorkerDAO workerDAO = WorkerMemoryDAO.getInstance(this);
-        workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
-        workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
-        workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
-        workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
-        workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
-
-        CleaningServiceDAO cleaningServiceDAO = CleaningServiceMemoryDAO.getInstance(this);
-        cleaningServiceDAO.create(new CleaningService());
-        cleaningServiceDAO.create(new CleaningService());
-        cleaningServiceDAO.create(new CleaningService());
-        cleaningServiceDAO.create(new CleaningService());
-        cleaningServiceDAO.create(new CleaningService());
 
         openFragment(new HistoryFragment());
     }
@@ -107,7 +84,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
                 getSupportActionBar().setTitle("Solicitar Serviço");
                 break;
             case R.id.id_bottom_requestes:
-                selectedFragment = new WorkerListFragment();
+                selectedFragment = new CleaningServiceSolicitationFragment();
                 getSupportActionBar().setTitle("Solicitações de Serviço");
                 break;
         }
@@ -126,5 +103,4 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     public void onFragmentInteraction(Uri uri) {
 
     }
-
 }

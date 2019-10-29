@@ -56,16 +56,16 @@ public class CleaningServiceListAdapter extends RecyclerView.Adapter<CleaningSer
         CleaningService cleaningService = cleaningServices.get(position);
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        String dateString = formatter.format(cleaningService.getDatetime().getDate());
+        String dateString = formatter.format(cleaningService.getDate());
 
         holder.cleaningServiceDate.setText(dateString);
         holder.cleaningServiceResponsible.setText(cleaningService.getResponsible().getName());
 
         String status;
         int value = cleaningService.getStatus().getValue();
-        if(value == 0) {
+        if (value == 0) {
             status = "Pendente";
-        } else if(value == 1) {
+        } else if (value == 1) {
             status = "Fazendo";
         } else {
             status = "Completa";

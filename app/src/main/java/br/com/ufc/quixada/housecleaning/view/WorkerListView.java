@@ -9,7 +9,7 @@ import java.util.List;
 
 import br.com.ufc.quixada.housecleaning.R;
 import br.com.ufc.quixada.housecleaning.adapter.WorkerListAdapter;
-import br.com.ufc.quixada.housecleaning.transactions.Worker;
+import br.com.ufc.quixada.housecleaning.transactions.User;
 
 public class WorkerListView extends GenericView {
 
@@ -17,7 +17,7 @@ public class WorkerListView extends GenericView {
     private RecyclerView.Adapter workerListAdapter;
     private RecyclerView.LayoutManager workerListLayoutManager;
 
-    private List<Worker> workers;
+    private List<User> workers;
 
     public WorkerListView() {
         workers = new ArrayList<>();
@@ -42,8 +42,8 @@ public class WorkerListView extends GenericView {
         return R.layout.fragment_worker_list;
     }
 
-    public void createWorker(Worker worker) {
-        workers.add(worker);
+    public void createWorker(User user) {
+        workers.add(user);
 
         workerListAdapter.notifyDataSetChanged();
     }

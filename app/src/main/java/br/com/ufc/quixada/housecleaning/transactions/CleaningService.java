@@ -1,23 +1,31 @@
 package br.com.ufc.quixada.housecleaning.transactions;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 public class CleaningService extends Bean {
 
     private float cleaningAreaSize;
     private float price;
-    private Timestamp datetime;
-    private Worker responsible;
+    private Date date;
+    private User responsible;
     private User requester;
     private Address address;
     private Status status;
     private String additionalComments;
 
     public CleaningService() {
-        this.price = 10f;
-        this.datetime = new Timestamp(System.currentTimeMillis()/1000);
-        this.responsible = new Worker("", "Caio", 5.0f);
-        this.status = Status.DOING;
+
+    }
+
+    public CleaningService(float cleaningAreaSize, float price, Date date, User responsible, User requester, Address address, Status status, String additionalComments) {
+        this.cleaningAreaSize = cleaningAreaSize;
+        this.price = price;
+        this.date = date;
+        this.responsible = responsible;
+        this.requester = requester;
+        this.address = address;
+        this.status = status;
+        this.additionalComments = additionalComments;
     }
 
     public float getCleaningAreaSize() {
@@ -36,19 +44,19 @@ public class CleaningService extends Bean {
         this.price = price;
     }
 
-    public Timestamp getDatetime() {
-        return datetime;
+    public Date getDate() {
+        return date;
     }
 
-    public void setDatetime(Timestamp datetime) {
-        this.datetime = datetime;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    public Worker getResponsible() {
+    public User getResponsible() {
         return responsible;
     }
 
-    public void setResponsible(Worker responsible) {
+    public void setResponsible(User responsible) {
         this.responsible = responsible;
     }
 

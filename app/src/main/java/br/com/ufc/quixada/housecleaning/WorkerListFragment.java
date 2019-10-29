@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import br.com.ufc.quixada.housecleaning.dao.WorkerDAO;
-import br.com.ufc.quixada.housecleaning.dao.memory.WorkerMemoryDAO;
-import br.com.ufc.quixada.housecleaning.presenter.WorkerEventListener;
-import br.com.ufc.quixada.housecleaning.transactions.Worker;
+import br.com.ufc.quixada.housecleaning.dao.UserDAO;
+import br.com.ufc.quixada.housecleaning.dao.memory.UserMemoryDAO;
+import br.com.ufc.quixada.housecleaning.presenter.UserEventListener;
+import br.com.ufc.quixada.housecleaning.transactions.User;
 import br.com.ufc.quixada.housecleaning.view.WorkerListView;
 
 /**
@@ -24,7 +24,7 @@ import br.com.ufc.quixada.housecleaning.view.WorkerListView;
  * Use the {@link WorkerListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WorkerListFragment extends Fragment implements WorkerEventListener {
+public class WorkerListFragment extends Fragment implements UserEventListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,7 +36,7 @@ public class WorkerListFragment extends Fragment implements WorkerEventListener 
 
     private OnFragmentInteractionListener mListener;
 
-    private WorkerDAO workerDAO = WorkerMemoryDAO.getInstance(this);
+    private UserDAO userDAO = UserMemoryDAO.getInstance(this);
     private WorkerListView workerListView;
 
     public WorkerListFragment() {
@@ -79,9 +79,9 @@ public class WorkerListFragment extends Fragment implements WorkerEventListener 
         workerListView = new WorkerListView();
         workerListView.initialize(view);
 
-        List<Worker> workers = workerDAO.findAll();
-        for(Worker worker : workers) {
-            workerListView.createWorker(worker);
+        List<User> users = userDAO.findAllWorkers();
+        for (User user : users) {
+            workerListView.createWorker(user);
         }
 
         return view;

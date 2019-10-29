@@ -8,24 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
-import br.com.ufc.quixada.housecleaning.dao.CleaningServiceDAO;
-import br.com.ufc.quixada.housecleaning.dao.memory.CleaningServiceMemoryDAO;
-import br.com.ufc.quixada.housecleaning.presenter.CleaningServiceEventListener;
-import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
-import br.com.ufc.quixada.housecleaning.util.SessionUtil;
-import br.com.ufc.quixada.housecleaning.view.CleaningServicesListView;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link HistoryFragment.OnFragmentInteractionListener} interface
+ * {@link CleaningServiceSolicitationFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link HistoryFragment#newInstance} factory method to
+ * Use the {@link CleaningServiceSolicitationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HistoryFragment extends Fragment implements CleaningServiceEventListener {
+public class CleaningServiceSolicitationFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -37,10 +29,7 @@ public class HistoryFragment extends Fragment implements CleaningServiceEventLis
 
     private OnFragmentInteractionListener mListener;
 
-    private CleaningServiceDAO cleaningServiceDAO = CleaningServiceMemoryDAO.getInstance(this);
-    private CleaningServicesListView cleaningServicesListView;
-
-    public HistoryFragment() {
+    public CleaningServiceSolicitationFragment() {
         // Required empty public constructor
     }
 
@@ -50,11 +39,11 @@ public class HistoryFragment extends Fragment implements CleaningServiceEventLis
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment HistoryFragment.
+     * @return A new instance of fragment CleaningServiceSolicitationFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HistoryFragment newInstance(String param1, String param2) {
-        HistoryFragment fragment = new HistoryFragment();
+    public static CleaningServiceSolicitationFragment newInstance(String param1, String param2) {
+        CleaningServiceSolicitationFragment fragment = new CleaningServiceSolicitationFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -75,17 +64,7 @@ public class HistoryFragment extends Fragment implements CleaningServiceEventLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_history, container, false);
-
-        cleaningServicesListView = new CleaningServicesListView();
-        cleaningServicesListView.initialize(view);
-
-        List<CleaningService> cleaningServices = cleaningServiceDAO.findAllByRequester(SessionUtil.getCurrentUserId(view.getContext()));
-        for (CleaningService cleaningService : cleaningServices) {
-            cleaningServicesListView.createCleaningServices(cleaningService);
-        }
-
-        return view;
+        return inflater.inflate(R.layout.fragment_cleaning_service_solicitation, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
