@@ -13,6 +13,13 @@ public class CleaningService extends Bean {
     private Status status;
     private String additionalComments;
 
+    public CleaningService() {
+        this.price = 10f;
+        this.datetime = new Timestamp(System.currentTimeMillis()/1000);
+        this.responsible = new Worker("", "Caio", 5.0f);
+        this.status = Status.DOING;
+    }
+
     public float getCleaningAreaSize() {
         return cleaningAreaSize;
     }

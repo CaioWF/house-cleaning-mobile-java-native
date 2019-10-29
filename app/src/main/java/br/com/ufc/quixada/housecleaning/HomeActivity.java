@@ -5,19 +5,25 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import br.com.ufc.quixada.housecleaning.dao.CleaningServiceDAO;
 import br.com.ufc.quixada.housecleaning.dao.WorkerDAO;
+import br.com.ufc.quixada.housecleaning.dao.memory.CleaningServiceMemoryDAO;
 import br.com.ufc.quixada.housecleaning.dao.memory.WorkerMemoryDAO;
+import br.com.ufc.quixada.housecleaning.presenter.CleaningServiceEventListener;
 import br.com.ufc.quixada.housecleaning.presenter.WorkerEventListener;
+import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
 import br.com.ufc.quixada.housecleaning.transactions.Worker;
 
 public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener,
-        WorkerListFragment.OnFragmentInteractionListener, WorkerEventListener {
+        WorkerListFragment.OnFragmentInteractionListener, WorkerEventListener,
+        HistoryFragment.OnFragmentInteractionListener, CleaningServiceEventListener {
 
     private BottomNavigationView bottomNavigationView;
 
@@ -38,6 +44,15 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
         workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
         workerDAO.create(new Worker("", "Just Testing", (float) 4.5));
+
+        CleaningServiceDAO cleaningServiceDAO = CleaningServiceMemoryDAO.getInstance(this);
+        cleaningServiceDAO.create(new CleaningService());
+        cleaningServiceDAO.create(new CleaningService());
+        cleaningServiceDAO.create(new CleaningService());
+        cleaningServiceDAO.create(new CleaningService());
+        cleaningServiceDAO.create(new CleaningService());
+
+        openFragment(new HistoryFragment());
     }
 
     @Override
@@ -77,7 +92,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         Fragment selectedFragment = null;
         switch (menuItem.getItemId()) {
             case R.id.id_bottom_home:
-                selectedFragment = new WorkerListFragment();
+                selectedFragment = new HistoryFragment();
                 getSupportActionBar().setTitle("House Cleaning");
                 break;
             case R.id.id_bottom_workers:
@@ -91,16 +106,16 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
                 getSupportActionBar().setTitle("Solicitações de Serviço");
                 break;
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.id_fragment_container, selectedFragment).commit();
+        openFragment(selectedFragment);
         return true;
     }
 
-    /*private void openFragment(Fragment fragment) {
+    private void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.id_fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
-    }*/
+    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {

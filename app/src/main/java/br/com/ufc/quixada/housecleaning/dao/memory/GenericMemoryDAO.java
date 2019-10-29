@@ -1,5 +1,7 @@
 package br.com.ufc.quixada.housecleaning.dao.memory;
 
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 

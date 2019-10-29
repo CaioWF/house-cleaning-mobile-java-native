@@ -97,7 +97,7 @@
             android:orientation="horizontal">
 
             <CheckBox
-                android:id="@+id/id_chackbox_confirm_registration"
+                android:id="@+id/id_checkbox_confirm_registration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -113,7 +113,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/id_btn_login"
+                android:id="@+id/id_btn_registration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

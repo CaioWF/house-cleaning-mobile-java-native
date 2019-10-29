@@ -59,12 +59,12 @@
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:layout_toRightOf="@+id/id_email_registration"
+                android:layout_toRightOf="@+id/id_email_login"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/ic_email_black_24dp" />
 
             <EditText
-                android:id="@+id/id_email_registration"
+                android:id="@+id/id_email_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -84,12 +84,12 @@
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:layout_toRightOf="@+id/id_senha_registration"
+                android:layout_toRightOf="@+id/id_pass_login"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/ic_lock" />
 
             <EditText
-                android:id="@+id/id_senha_registration"
+                android:id="@+id/id_pass_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
