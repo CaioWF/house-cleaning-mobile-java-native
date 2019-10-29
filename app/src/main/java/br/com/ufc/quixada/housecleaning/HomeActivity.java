@@ -1,5 +1,8 @@
 package br.com.ufc.quixada.housecleaning;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.SearchView;
 
 import br.com.ufc.quixada.housecleaning.dao.CleaningServiceDAO;
 import br.com.ufc.quixada.housecleaning.dao.WorkerDAO;
@@ -76,10 +80,13 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
                 //Implementar
                 return true;
             case R.id.menu_about:
-                //Implementar
+                Intent about = new Intent(getApplicationContext(), AboutActivity.class);
+                startActivity(about);
                 return true;
             case R.id.menu_logout:
-                //Implementar
+                Intent login = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(login);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -98,8 +105,6 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.id_bottom_workers:
                 selectedFragment = new WorkerListFragment();
                 getSupportActionBar().setTitle("Solicitar Serviço");
-                /*Fragment workersFragment = WorkerListFragment.newInstance("param1", "param2");
-                openFragment(workersFragment);*/
                 break;
             case R.id.id_bottom_requestes:
                 selectedFragment = new WorkerListFragment();
