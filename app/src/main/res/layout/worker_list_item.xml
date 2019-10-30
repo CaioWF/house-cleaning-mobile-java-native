@@ -60,13 +60,6 @@
                 android:padding="16dp">
 
                 <Button
-                    android:id="@+id/view_profile_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ver Perfil"
-                    android:theme="@style/PrimaryFlatButton" />
-
-                <Button
                     android:id="@+id/hire_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

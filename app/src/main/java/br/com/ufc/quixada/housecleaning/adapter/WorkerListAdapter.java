@@ -32,7 +32,6 @@ public class WorkerListAdapter extends RecyclerView.Adapter<WorkerListAdapter.Wo
         public TextView workerName;
         public TextView workerRate;
         public ImageView workerPhoto;
-        public Button viewProfileButton;
         public Button hireButton;
 
         public WorkerListViewHolder(View view) {
@@ -41,7 +40,6 @@ public class WorkerListAdapter extends RecyclerView.Adapter<WorkerListAdapter.Wo
             workerName = view.findViewById(R.id.worker_name_text_view);
             workerRate = view.findViewById(R.id.worker_rate_text_view);
             workerPhoto = view.findViewById(R.id.worker_photo_image_view);
-            viewProfileButton = view.findViewById(R.id.view_profile_button);
             hireButton = view.findViewById(R.id.hire_button);
         }
     }
@@ -71,14 +69,7 @@ public class WorkerListAdapter extends RecyclerView.Adapter<WorkerListAdapter.Wo
         holder.workerName.setText(worker.getName());
         holder.workerRate.setText(worker.getRate() + " ★");
         // Load Photo
-        new DownloadImage(holder.workerPhoto).execute(worker.getPhoto());
-
-        holder.viewProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // To implement
-            }
-        });
+        // new DownloadImage(holder.workerPhoto).execute(worker.getPhoto());
 
         holder.hireButton.setOnClickListener(new View.OnClickListener() {
             @Override
