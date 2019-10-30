@@ -42,7 +42,7 @@ public class RequestCleaningServiceActivity extends AppCompatActivity implements
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("Solicitar Serviço de Limpeza");
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#189764")));
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#62DBA8")));
 
         userDAO = UserMemoryDAO.getInstance(this);
 

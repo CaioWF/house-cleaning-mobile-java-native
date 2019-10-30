@@ -30,7 +30,7 @@ public class UserProfileActivity extends AppCompatActivity implements UserEventL
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("Perfil");
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#189764")));
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#62DBA8")));
 
         View rootView = getWindow().getDecorView().getRootView();
 
