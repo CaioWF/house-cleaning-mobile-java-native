@@ -126,4 +126,8 @@ public class WorkerListFragment extends Fragment implements UserEventListener {
         void onFragmentInteraction(Uri uri);
     }
 
+    public WorkerListView getWorkerListView() {
+        return workerListView;
+    }
+
 }
