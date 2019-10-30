@@ -76,9 +76,6 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
                 startActivity(userProfile);
 
                 return true;
-            case R.id.menu_settings:
-                //Implementar
-                return true;
             case R.id.menu_about:
                 Intent about = new Intent(getApplicationContext(), AboutActivity.class);
                 startActivity(about);
