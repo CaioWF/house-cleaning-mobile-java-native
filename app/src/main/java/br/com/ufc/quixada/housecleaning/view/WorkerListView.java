@@ -49,6 +49,12 @@ public class WorkerListView extends GenericView {
             workers.add(user);
         }
 
+        ((WorkerListAdapter) workerListAdapter).updateWorkersFull();
+
         workerListAdapter.notifyDataSetChanged();
+    }
+
+    public RecyclerView.Adapter getWorkerListAdapter() {
+        return workerListAdapter;
     }
 }
