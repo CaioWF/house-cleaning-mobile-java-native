@@ -3,6 +3,7 @@ package br.com.ufc.quixada.housecleaning.view;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class WorkerListView extends GenericView {
     private RecyclerView workerListRecyclerView;
     private RecyclerView.Adapter workerListAdapter;
     private RecyclerView.LayoutManager workerListLayoutManager;
+    private TextView emptyView;
 
     private List<User> workers;
 
@@ -28,6 +30,7 @@ public class WorkerListView extends GenericView {
         super.initialize(rootView);
 
         workerListRecyclerView = rootView.findViewById(R.id.worker_list_recycler_view);
+        emptyView = (TextView) rootView.findViewById(R.id.empty_view);
         workerListRecyclerView.setHasFixedSize(true);
 
         workerListLayoutManager = new LinearLayoutManager(rootView.getContext());
@@ -35,6 +38,15 @@ public class WorkerListView extends GenericView {
 
         workerListAdapter = new WorkerListAdapter(workers);
         workerListRecyclerView.setAdapter(workerListAdapter);
+
+        if (workers.isEmpty()) {
+            workerListRecyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        }
+        else {
+            workerListRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -44,7 +56,8 @@ public class WorkerListView extends GenericView {
 
     public void updateWorkerList(List<User> users) {
         workers.clear();
-
+        emptyView.setVisibility(View.GONE);
+        workerListRecyclerView.setVisibility(View.VISIBLE);
         for (User user : users) {
             workers.add(user);
         }

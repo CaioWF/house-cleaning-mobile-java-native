@@ -3,6 +3,7 @@ package br.com.ufc.quixada.housecleaning.view;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class CleaningServicesListView extends GenericView{
     private RecyclerView cleaningServiceListRecyclerView;
     private RecyclerView.Adapter cleaningServiceListAdapter;
     private RecyclerView.LayoutManager cleaningServiceListLayoutManager;
+    private TextView emptyView;
 
     private List<CleaningService> cleaningServices;
 
@@ -28,6 +30,7 @@ public class CleaningServicesListView extends GenericView{
         super.initialize(rootView);
 
         cleaningServiceListRecyclerView = rootView.findViewById(R.id.cleaning_service_recycler_view);
+        emptyView = (TextView) rootView.findViewById(R.id.empty_view2);
         cleaningServiceListRecyclerView.setHasFixedSize(true);
 
         cleaningServiceListLayoutManager = new LinearLayoutManager(rootView.getContext());
@@ -35,6 +38,15 @@ public class CleaningServicesListView extends GenericView{
 
         cleaningServiceListAdapter = new CleaningServiceListAdapter(cleaningServices);
         cleaningServiceListRecyclerView.setAdapter(cleaningServiceListAdapter);
+
+        if (cleaningServices.isEmpty()) {
+            cleaningServiceListRecyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        }
+        else {
+            cleaningServiceListRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -44,6 +56,8 @@ public class CleaningServicesListView extends GenericView{
 
     public void createCleaningServices(CleaningService cleaningService) {
         cleaningServices.add(cleaningService);
+        cleaningServiceListRecyclerView.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.GONE);
 
         cleaningServiceListAdapter.notifyDataSetChanged();
     }
