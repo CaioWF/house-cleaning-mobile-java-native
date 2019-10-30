@@ -92,8 +92,8 @@ public class LoginActivity extends AppCompatActivity implements UserEventListene
 
         UserDAO userDAO = UserMemoryDAO.getInstance(this);
 
-        User user1 = new User("", "John Doe", "", "", true, 4.5f);
-        User user2 = new User("", "Jane Doe", "", "", false, 4.5f);
+        User user1 = new User("", "John Doe", "john", "doe", true, 4.5f);
+        User user2 = new User("", "Jane Doe", "jane", "doe", false, 4.5f);
 
         userDAO.create(user1);
         userDAO.create(user1);

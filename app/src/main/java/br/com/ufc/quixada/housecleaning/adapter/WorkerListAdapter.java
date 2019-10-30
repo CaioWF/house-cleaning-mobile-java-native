@@ -17,7 +17,6 @@ import br.com.ufc.quixada.housecleaning.R;
 import br.com.ufc.quixada.housecleaning.RequestCleaningServiceActivity;
 import br.com.ufc.quixada.housecleaning.network.DownloadImage;
 import br.com.ufc.quixada.housecleaning.transactions.User;
-import br.com.ufc.quixada.housecleaning.transactions.Worker;
 
 public class WorkerListAdapter extends RecyclerView.Adapter<WorkerListAdapter.WorkerListViewHolder> {
 
@@ -75,7 +74,7 @@ public class WorkerListAdapter extends RecyclerView.Adapter<WorkerListAdapter.Wo
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), RequestCleaningServiceActivity.class);
-                intent.putExtra("workerId", worker.getId());
+                intent.putExtra("user_id", worker.getId());
 
                 v.getContext().startActivity(intent);
             }

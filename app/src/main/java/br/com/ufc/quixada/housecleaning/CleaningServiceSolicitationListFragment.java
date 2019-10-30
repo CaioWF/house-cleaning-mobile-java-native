@@ -8,16 +8,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
+import br.com.ufc.quixada.housecleaning.dao.CleaningServiceDAO;
+import br.com.ufc.quixada.housecleaning.dao.memory.CleaningServiceMemoryDAO;
+import br.com.ufc.quixada.housecleaning.presenter.CleaningServiceEventListener;
+import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
+import br.com.ufc.quixada.housecleaning.util.SessionUtil;
+import br.com.ufc.quixada.housecleaning.view.CleaningServiceSolicitationListView;
+import br.com.ufc.quixada.housecleaning.view.eventlistener.CleaningServiceSolicitationListViewEventListener;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link CleaningServiceSolicitationFragment.OnFragmentInteractionListener} interface
+ * {@link CleaningServiceSolicitationListFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link CleaningServiceSolicitationFragment#newInstance} factory method to
+ * Use the {@link CleaningServiceSolicitationListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CleaningServiceSolicitationFragment extends Fragment {
+public class CleaningServiceSolicitationListFragment extends Fragment implements CleaningServiceEventListener, CleaningServiceSolicitationListViewEventListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,7 +39,10 @@ public class CleaningServiceSolicitationFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public CleaningServiceSolicitationFragment() {
+    private CleaningServiceDAO cleaningServiceDAO = CleaningServiceMemoryDAO.getInstance(this);
+    private CleaningServiceSolicitationListView cleaningServiceSolicitationListView;
+
+    public CleaningServiceSolicitationListFragment() {
         // Required empty public constructor
     }
 
@@ -39,11 +52,11 @@ public class CleaningServiceSolicitationFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment CleaningServiceSolicitationFragment.
+     * @return A new instance of fragment CleaningServiceSolicitationListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CleaningServiceSolicitationFragment newInstance(String param1, String param2) {
-        CleaningServiceSolicitationFragment fragment = new CleaningServiceSolicitationFragment();
+    public static CleaningServiceSolicitationListFragment newInstance(String param1, String param2) {
+        CleaningServiceSolicitationListFragment fragment = new CleaningServiceSolicitationListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -64,7 +77,14 @@ public class CleaningServiceSolicitationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cleaning_service_solicitation, container, false);
+        View view = inflater.inflate(R.layout.fragment_cleaning_service_solicitation_list, container, false);
+
+        cleaningServiceSolicitationListView = new CleaningServiceSolicitationListView(this);
+        cleaningServiceSolicitationListView.initialize(view);
+
+        updateCleaningServiceList();
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -89,6 +109,33 @@ public class CleaningServiceSolicitationFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClickAcceptSolicitation(CleaningService cleaningService) {
+        cleaningService.setStatus(CleaningService.Status.ACCEPTED);
+
+        updateCleaningServiceList();
+    }
+
+    @Override
+    public void onClickRefuseSolicitation(CleaningService cleaningService) {
+        cleaningService.setStatus(CleaningService.Status.REFUSED);
+
+        updateCleaningServiceList();
+    }
+
+    @Override
+    public void onClickFinalizeSolicitation(CleaningService cleaningService) {
+        cleaningService.setStatus(CleaningService.Status.DONE);
+
+        updateCleaningServiceList();
+    }
+
+    private void updateCleaningServiceList() {
+        List<CleaningService> cleaningServices = cleaningServiceDAO.findAllByResponsible(SessionUtil.getCurrentUserId(getContext()));
+
+        cleaningServiceSolicitationListView.updateCleaningServiceList(cleaningServices);
     }
 
     /**

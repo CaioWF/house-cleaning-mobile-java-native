@@ -61,17 +61,7 @@ public class CleaningServiceListAdapter extends RecyclerView.Adapter<CleaningSer
         holder.cleaningServiceDate.setText(dateString);
         holder.cleaningServiceResponsible.setText(cleaningService.getResponsible().getName());
 
-        String status;
-        int value = cleaningService.getStatus().getValue();
-        if (value == 0) {
-            status = "Pendente";
-        } else if (value == 1) {
-            status = "Fazendo";
-        } else {
-            status = "Completa";
-        }
-
-        holder.cleaningServiceStatus.setText(status);
+        holder.cleaningServiceStatus.setText(cleaningService.getStatus().toString());
         holder.cleaningServicePrice.setText("R$ " + String.valueOf(cleaningService.getPrice()).replace(".", ",") + "0");
 
         holder.seeDetails.setOnClickListener(new View.OnClickListener() {

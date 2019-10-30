@@ -18,7 +18,7 @@ import br.com.ufc.quixada.housecleaning.presenter.UserEventListener;
 
 public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener,
         WorkerListFragment.OnFragmentInteractionListener, UserEventListener,
-        HistoryFragment.OnFragmentInteractionListener, CleaningServiceSolicitationFragment.OnFragmentInteractionListener, CleaningServiceEventListener {
+        HistoryFragment.OnFragmentInteractionListener, CleaningServiceSolicitationListFragment.OnFragmentInteractionListener, CleaningServiceEventListener {
 
     private BottomNavigationView bottomNavigationView;
 
@@ -84,7 +84,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
                 getSupportActionBar().setTitle("Solicitar Serviço");
                 break;
             case R.id.id_bottom_requestes:
-                selectedFragment = new CleaningServiceSolicitationFragment();
+                selectedFragment = new CleaningServiceSolicitationListFragment();
                 getSupportActionBar().setTitle("Solicitações de Serviço");
                 break;
         }
