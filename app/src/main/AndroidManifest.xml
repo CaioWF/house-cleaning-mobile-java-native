@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AboutActivity"></activity>
+        <activity android:name=".UserProfileActivity"></activity>
+        <activity android:name=".AboutActivity" />
         <activity
             android:name=".RequestCleaningServiceActivity"
             android:configChanges="orientation|screenSize" />

@@ -33,6 +33,10 @@ public class User extends Bean {
         this.name = name;
     }
 
+    public User() {
+
+    }
+
     public String getPhoto() {
         return photo;
     }

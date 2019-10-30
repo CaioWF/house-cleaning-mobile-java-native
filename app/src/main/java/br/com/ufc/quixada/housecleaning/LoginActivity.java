@@ -2,8 +2,8 @@ package br.com.ufc.quixada.housecleaning;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,15 +13,19 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.ufc.quixada.housecleaning.dao.CleaningServiceDAO;
+import br.com.ufc.quixada.housecleaning.dao.PlaceDAO;
 import br.com.ufc.quixada.housecleaning.dao.UserDAO;
 import br.com.ufc.quixada.housecleaning.dao.memory.CleaningServiceMemoryDAO;
+import br.com.ufc.quixada.housecleaning.dao.memory.PlaceMemoryDAO;
 import br.com.ufc.quixada.housecleaning.dao.memory.UserMemoryDAO;
 import br.com.ufc.quixada.housecleaning.presenter.CleaningServiceEventListener;
+import br.com.ufc.quixada.housecleaning.presenter.PlaceEventListener;
 import br.com.ufc.quixada.housecleaning.presenter.UserEventListener;
 import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
+import br.com.ufc.quixada.housecleaning.transactions.Place;
 import br.com.ufc.quixada.housecleaning.transactions.User;
 
-public class LoginActivity extends AppCompatActivity implements UserEventListener, CleaningServiceEventListener {
+public class LoginActivity extends AppCompatActivity implements UserEventListener, CleaningServiceEventListener, PlaceEventListener {
 
     private Button btnLogin;
     private Button btnGoToRegistration;
@@ -120,5 +124,15 @@ public class LoginActivity extends AppCompatActivity implements UserEventListene
         cleaningServiceDAO.create(cleaningService);
         cleaningServiceDAO.create(cleaningService);
         cleaningServiceDAO.create(cleaningService);
+
+//      Places
+
+        PlaceDAO placeDAO = PlaceMemoryDAO.getInstance(this);
+
+        placeDAO.create(new Place("London", "Soho"));
+        placeDAO.create(new Place("London", "Soho"));
+        placeDAO.create(new Place("London", "Soho"));
+        placeDAO.create(new Place("London", "Soho"));
+        placeDAO.create(new Place("London", "Soho"));
     }
 }

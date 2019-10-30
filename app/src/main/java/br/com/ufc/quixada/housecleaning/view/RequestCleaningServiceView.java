@@ -10,12 +10,19 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import br.com.ufc.quixada.housecleaning.R;
+import br.com.ufc.quixada.housecleaning.transactions.Address;
+import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
 import br.com.ufc.quixada.housecleaning.transactions.Place;
+import br.com.ufc.quixada.housecleaning.view.eventlistener.RequestCleaningServiceViewEventListener;
 
 public class RequestCleaningServiceView extends GenericView {
 
@@ -34,15 +41,19 @@ public class RequestCleaningServiceView extends GenericView {
 
     private EditText additionalCommentsField;
 
+    private Button saveButton;
+
     private List<Place> places;
     private ArrayAdapter<Place> placeArrayAdapter;
+    private RequestCleaningServiceViewEventListener requestCleaningServiceViewEventListener;
 
-    public RequestCleaningServiceView() {
+    public RequestCleaningServiceView(RequestCleaningServiceViewEventListener requestCleaningServiceViewEventListener) {
         places = new ArrayList<>();
+        this.requestCleaningServiceViewEventListener = requestCleaningServiceViewEventListener;
     }
 
     @Override
-    public void initialize(View rootView) {
+    public void initialize(final View rootView) {
         super.initialize(rootView);
 
         areaSizeField = rootView.findViewById(R.id.area_size_field);
@@ -98,6 +109,36 @@ public class RequestCleaningServiceView extends GenericView {
         complementField = rootView.findViewById(R.id.complement_field);
 
         additionalCommentsField = rootView.findViewById(R.id.additional_comments_field);
+
+        saveButton = rootView.findViewById(R.id.save_button);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    float cleaningAreaSize = Float.parseFloat(areaSizeField.getText().toString());
+                    float price = cleaningAreaSize * 10;
+                    Date date = new SimpleDateFormat("dd/MM/yyyy").parse(setCleaningServiceDateButton.getText().toString());
+                    Date time = new SimpleDateFormat("hh:mm").parse(setCleaningServiceTimeButton.getText().toString());
+                    Place place = (Place) placeField.getSelectedItem();
+                    String street = streetField.getText().toString();
+                    int number = Integer.parseInt(numberField.getText().toString());
+                    String complement = complementField.getText().toString();
+                    Address address = new Address(place, street, number, complement);
+                    String additionalComments = additionalCommentsField.getText().toString();
+
+                    CleaningService cleaningService = new CleaningService();
+                    cleaningService.setCleaningAreaSize(cleaningAreaSize);
+                    cleaningService.setPrice(price);
+                    cleaningService.setDate(joinDateAndTime(date, time));
+                    cleaningService.setAddress(address);
+                    cleaningService.setAdditionalComments(additionalComments);
+
+                    requestCleaningServiceViewEventListener.onClickSave(cleaningService);
+                } catch (NumberFormatException | ParseException e) {
+                    Toast.makeText(rootView.getContext(), "One or more field values are invalid", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -140,6 +181,24 @@ public class RequestCleaningServiceView extends GenericView {
         else time += minute;
 
         return time;
+    }
+
+    private Date joinDateAndTime(Date date, Date time) {
+        java.util.Calendar calendarDate = java.util.Calendar.getInstance();
+        calendarDate.setTime(date);
+
+        java.util.Calendar calendarTime = java.util.Calendar.getInstance();
+        calendarTime.setTime(time);
+
+        java.util.Calendar calendarDateTime = java.util.Calendar.getInstance();
+        calendarDateTime.set(java.util.Calendar.DAY_OF_MONTH, calendarDate.get(java.util.Calendar.DAY_OF_MONTH));
+        calendarDateTime.set(java.util.Calendar.MONTH, calendarDate.get(java.util.Calendar.MONTH));
+        calendarDateTime.set(java.util.Calendar.YEAR, calendarDate.get(java.util.Calendar.YEAR));
+        calendarDateTime.set(java.util.Calendar.HOUR, calendarTime.get(java.util.Calendar.HOUR));
+        calendarDateTime.set(java.util.Calendar.MINUTE, calendarTime.get(java.util.Calendar.MINUTE));
+        calendarDateTime.set(java.util.Calendar.SECOND, calendarTime.get(java.util.Calendar.SECOND));
+
+        return calendarDateTime.getTime();
     }
 
 }

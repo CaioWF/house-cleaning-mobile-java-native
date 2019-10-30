@@ -157,20 +157,11 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/cancel_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="onClickButtonCancel"
-                android:text="@string/cleaning_service_cancel_button" />
-
-            <Button
                 android:id="@+id/save_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="onClickButtonSave"
-                android:text="@string/cleaning_service_save_button" />
+                android:text="@string/save_button" />
 
         </LinearLayout>
 

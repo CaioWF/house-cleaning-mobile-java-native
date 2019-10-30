@@ -42,8 +42,12 @@ public class WorkerListView extends GenericView {
         return R.layout.fragment_worker_list;
     }
 
-    public void createWorker(User user) {
-        workers.add(user);
+    public void updateWorkerList(List<User> users) {
+        workers.clear();
+
+        for (User user : users) {
+            workers.add(user);
+        }
 
         workerListAdapter.notifyDataSetChanged();
     }

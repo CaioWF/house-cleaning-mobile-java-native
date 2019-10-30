@@ -80,9 +80,7 @@ public class WorkerListFragment extends Fragment implements UserEventListener {
         workerListView.initialize(view);
 
         List<User> users = userDAO.findAllWorkers();
-        for (User user : users) {
-            workerListView.createWorker(user);
-        }
+        workerListView.updateWorkerList(users);
 
         return view;
     }
