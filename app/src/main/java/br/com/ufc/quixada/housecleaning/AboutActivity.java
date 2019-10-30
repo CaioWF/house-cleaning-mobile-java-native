@@ -18,7 +18,7 @@ public class AboutActivity extends AppCompatActivity {
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("Sobre");
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#189764")));
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#62DBA8")));
 
     }
 
