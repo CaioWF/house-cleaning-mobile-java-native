@@ -34,7 +34,6 @@ public class CleaningServiceListAdapter extends RecyclerView.Adapter<CleaningSer
             cleaningServiceResponsible = view.findViewById(R.id.history_item_responsible);
             cleaningServiceStatus = view.findViewById(R.id.history_item_status);
             cleaningServicePrice = view.findViewById(R.id.history_item_price);
-            seeDetails = view.findViewById(R.id.btn_see_details);
         }
     }
 
@@ -64,12 +63,6 @@ public class CleaningServiceListAdapter extends RecyclerView.Adapter<CleaningSer
         holder.cleaningServiceStatus.setText(cleaningService.getStatus().toString());
         holder.cleaningServicePrice.setText("R$ " + String.valueOf(cleaningService.getPrice()).replace(".", ",") + "0");
 
-        holder.seeDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // To implement
-            }
-        });
     }
 
     @Override
