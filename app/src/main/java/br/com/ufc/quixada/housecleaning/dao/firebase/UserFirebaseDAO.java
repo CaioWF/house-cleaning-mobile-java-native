@@ -1,4 +1,4 @@
-package br.com.ufc.quixada.housecleaning.dao.memory;
+package br.com.ufc.quixada.housecleaning.dao.firebase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,14 +7,20 @@ import br.com.ufc.quixada.housecleaning.dao.UserDAO;
 import br.com.ufc.quixada.housecleaning.presenter.UserEventListener;
 import br.com.ufc.quixada.housecleaning.transactions.User;
 
-public class UserMemoryDAO extends GenericMemoryDAO<User> implements UserDAO {
+public class UserFirebaseDAO extends GenericFirebaseDAO<User> implements UserDAO {
 
-    private static UserDAO userDAO;
-    private UserEventListener userEventListener;
+    private static UserDAO userDAO = null;
 
-    private UserMemoryDAO(UserEventListener userEventListener) {
-        super();
-        this.userEventListener = userEventListener;
+    private UserFirebaseDAO(UserEventListener eventListener) {
+        super("users", eventListener, User.class);
+    }
+
+    public static UserDAO getInstance(UserEventListener eventListener) {
+        if (userDAO == null) {
+            userDAO = new UserFirebaseDAO(eventListener);
+        }
+
+        return userDAO;
     }
 
     @Override
@@ -37,13 +43,6 @@ public class UserMemoryDAO extends GenericMemoryDAO<User> implements UserDAO {
         }
 
         return null;
-    }
-
-    public static UserDAO getInstance(UserEventListener userEventListener) {
-        if (userDAO == null)
-            userDAO = new UserMemoryDAO(userEventListener);
-
-        return userDAO;
     }
 
 }

@@ -1,13 +1,13 @@
 package br.com.ufc.quixada.housecleaning.view;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import br.com.ufc.quixada.housecleaning.R;
 import br.com.ufc.quixada.housecleaning.adapter.WorkerListAdapter;
 import br.com.ufc.quixada.housecleaning.transactions.User;
@@ -30,7 +30,7 @@ public class WorkerListView extends GenericView {
         super.initialize(rootView);
 
         workerListRecyclerView = rootView.findViewById(R.id.worker_list_recycler_view);
-        emptyView = (TextView) rootView.findViewById(R.id.empty_view);
+        emptyView = rootView.findViewById(R.id.empty_view);
         workerListRecyclerView.setHasFixedSize(true);
 
         workerListLayoutManager = new LinearLayoutManager(rootView.getContext());
@@ -42,8 +42,7 @@ public class WorkerListView extends GenericView {
         if (workers.isEmpty()) {
             workerListRecyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             workerListRecyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
         }
@@ -63,6 +62,12 @@ public class WorkerListView extends GenericView {
         }
 
         ((WorkerListAdapter) workerListAdapter).updateWorkersFull();
+
+        workerListAdapter.notifyDataSetChanged();
+    }
+
+    public void addWorkerToList(User worker) {
+        workers.add(worker);
 
         workerListAdapter.notifyDataSetChanged();
     }

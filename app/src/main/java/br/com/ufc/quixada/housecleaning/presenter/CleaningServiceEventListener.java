@@ -1,5 +1,7 @@
 package br.com.ufc.quixada.housecleaning.presenter;
 
-public interface CleaningServiceEventListener {
+import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
+
+public interface CleaningServiceEventListener extends EventListener<CleaningService> {
 
 }

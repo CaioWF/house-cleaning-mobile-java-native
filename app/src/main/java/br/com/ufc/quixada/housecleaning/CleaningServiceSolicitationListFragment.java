@@ -3,14 +3,15 @@ package br.com.ufc.quixada.housecleaning;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
+import androidx.fragment.app.Fragment;
 import br.com.ufc.quixada.housecleaning.dao.CleaningServiceDAO;
+import br.com.ufc.quixada.housecleaning.dao.firebase.CleaningServiceFirebaseDAO;
 import br.com.ufc.quixada.housecleaning.dao.memory.CleaningServiceMemoryDAO;
 import br.com.ufc.quixada.housecleaning.presenter.CleaningServiceEventListener;
 import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
@@ -27,7 +28,7 @@ import br.com.ufc.quixada.housecleaning.view.eventlistener.CleaningServiceSolici
  * Use the {@link CleaningServiceSolicitationListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CleaningServiceSolicitationListFragment extends Fragment implements CleaningServiceEventListener, CleaningServiceSolicitationListViewEventListener {
+public class CleaningServiceSolicitationListFragment extends Fragment implements CleaningServiceSolicitationListViewEventListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -39,7 +40,7 @@ public class CleaningServiceSolicitationListFragment extends Fragment implements
 
     private OnFragmentInteractionListener mListener;
 
-    private CleaningServiceDAO cleaningServiceDAO = CleaningServiceMemoryDAO.getInstance(this);
+    private CleaningServiceDAO cleaningServiceDAO;
     private CleaningServiceSolicitationListView cleaningServiceSolicitationListView;
 
     public CleaningServiceSolicitationListFragment() {
@@ -78,6 +79,23 @@ public class CleaningServiceSolicitationListFragment extends Fragment implements
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cleaning_service_solicitation_list, container, false);
+
+        cleaningServiceDAO = CleaningServiceFirebaseDAO.getInstance(new CleaningServiceEventListener() {
+            @Override
+            public void onAdded(CleaningService cleaningService) {
+                cleaningServiceSolicitationListView.addCleaningServiceToList(cleaningService);
+            }
+
+            @Override
+            public void onChanged(CleaningService cleaningService) {
+
+            }
+
+            @Override
+            public void onRemoved(CleaningService cleaningService) {
+
+            }
+        });
 
         cleaningServiceSolicitationListView = new CleaningServiceSolicitationListView(this);
         cleaningServiceSolicitationListView.initialize(view);

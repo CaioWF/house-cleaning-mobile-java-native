@@ -1,4 +1,7 @@
 package br.com.ufc.quixada.housecleaning.presenter;
 
-public interface UserEventListener {
+import br.com.ufc.quixada.housecleaning.transactions.User;
+
+public interface UserEventListener extends EventListener<User> {
+
 }

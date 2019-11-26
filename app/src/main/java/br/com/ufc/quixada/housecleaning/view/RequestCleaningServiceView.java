@@ -26,7 +26,7 @@ import br.com.ufc.quixada.housecleaning.view.eventlistener.RequestCleaningServic
 
 public class RequestCleaningServiceView extends GenericView {
 
-    private EditText areaSizeField;
+    private EditText numberOfRoomsField;
 
     private Button setCleaningServiceDateButton;
     private Button setCleaningServiceTimeButton;
@@ -56,7 +56,7 @@ public class RequestCleaningServiceView extends GenericView {
     public void initialize(final View rootView) {
         super.initialize(rootView);
 
-        areaSizeField = rootView.findViewById(R.id.area_size_field);
+        numberOfRoomsField = rootView.findViewById(R.id.number_of_rooms_field);
 
         setCleaningServiceDateButton = rootView.findViewById(R.id.set_cleaning_service_date_button);
         setCleaningServiceDateButton.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +115,7 @@ public class RequestCleaningServiceView extends GenericView {
             @Override
             public void onClick(View v) {
                 try {
-                    float cleaningAreaSize = Float.parseFloat(areaSizeField.getText().toString());
+                    float cleaningAreaSize = Float.parseFloat(numberOfRoomsField.getText().toString());
                     float price = cleaningAreaSize * 10;
                     Date date = new SimpleDateFormat("dd/MM/yyyy").parse(setCleaningServiceDateButton.getText().toString());
                     Date time = new SimpleDateFormat("hh:mm").parse(setCleaningServiceTimeButton.getText().toString());
@@ -127,7 +127,7 @@ public class RequestCleaningServiceView extends GenericView {
                     String additionalComments = additionalCommentsField.getText().toString();
 
                     CleaningService cleaningService = new CleaningService();
-                    cleaningService.setCleaningAreaSize(cleaningAreaSize);
+                    cleaningService.setNumberOfRooms(cleaningAreaSize);
                     cleaningService.setPrice(price);
                     cleaningService.setDate(joinDateAndTime(date, time));
                     cleaningService.setAddress(address);

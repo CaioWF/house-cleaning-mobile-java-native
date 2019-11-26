@@ -3,15 +3,15 @@ package br.com.ufc.quixada.housecleaning;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
+import androidx.fragment.app.Fragment;
 import br.com.ufc.quixada.housecleaning.dao.CleaningServiceDAO;
-import br.com.ufc.quixada.housecleaning.dao.memory.CleaningServiceMemoryDAO;
+import br.com.ufc.quixada.housecleaning.dao.firebase.CleaningServiceFirebaseDAO;
 import br.com.ufc.quixada.housecleaning.presenter.CleaningServiceEventListener;
 import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
 import br.com.ufc.quixada.housecleaning.util.SessionUtil;
@@ -25,7 +25,7 @@ import br.com.ufc.quixada.housecleaning.view.CleaningServicesListView;
  * Use the {@link HistoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HistoryFragment extends Fragment implements CleaningServiceEventListener {
+public class HistoryFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -37,7 +37,7 @@ public class HistoryFragment extends Fragment implements CleaningServiceEventLis
 
     private OnFragmentInteractionListener mListener;
 
-    private CleaningServiceDAO cleaningServiceDAO = CleaningServiceMemoryDAO.getInstance(this);
+    private CleaningServiceDAO cleaningServiceDAO;
     private CleaningServicesListView cleaningServicesListView;
 
     public HistoryFragment() {
@@ -77,12 +77,29 @@ public class HistoryFragment extends Fragment implements CleaningServiceEventLis
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
+        cleaningServiceDAO = CleaningServiceFirebaseDAO.getInstance(new CleaningServiceEventListener() {
+            @Override
+            public void onAdded(CleaningService cleaningService) {
+                cleaningServicesListView.addCleaningServiceToList(cleaningService);
+            }
+
+            @Override
+            public void onChanged(CleaningService cleaningService) {
+
+            }
+
+            @Override
+            public void onRemoved(CleaningService cleaningService) {
+
+            }
+        });
+
         cleaningServicesListView = new CleaningServicesListView();
         cleaningServicesListView.initialize(view);
 
         List<CleaningService> cleaningServices = cleaningServiceDAO.findAllByRequester(SessionUtil.getCurrentUserId(view.getContext()));
         for (CleaningService cleaningService : cleaningServices) {
-            cleaningServicesListView.createCleaningServices(cleaningService);
+            cleaningServicesListView.addCleaningServiceToList(cleaningService);
         }
 
         return view;

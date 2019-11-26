@@ -1,5 +1,6 @@
 package br.com.ufc.quixada.housecleaning.view;
 
+import android.net.Uri;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -7,12 +8,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.squareup.picasso.Picasso;
+
 import br.com.ufc.quixada.housecleaning.R;
-import br.com.ufc.quixada.housecleaning.network.DownloadImage;
 import br.com.ufc.quixada.housecleaning.transactions.User;
 import br.com.ufc.quixada.housecleaning.view.eventlistener.UserProfileViewEventListener;
 
 public class UserProfileView extends GenericView {
+
+    private Uri userPhotoUri;
 
     private ImageView photoImageView;
 
@@ -41,11 +45,15 @@ public class UserProfileView extends GenericView {
     public void initialize(View rootView) {
         super.initialize(rootView);
 
+        userPhotoUri = null;
+
+        photoImageView = rootView.findViewById(R.id.user_profile_photo);
+
         loadPhotoButton = rootView.findViewById(R.id.load_image_button);
         loadPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                userProfileViewEventListener.onClickLoadPhotoButton();
             }
         });
 
@@ -76,7 +84,7 @@ public class UserProfileView extends GenericView {
                     user.setWorker(false);
                 }
 
-                userProfileViewEventListener.onClickSave(user);
+                userProfileViewEventListener.onClickSave(user, userPhotoUri);
             }
         });
     }
@@ -87,8 +95,9 @@ public class UserProfileView extends GenericView {
     }
 
     public void loadUserProfile(User user) {
-        // Load Photo
-//        new DownloadImage(photoImageView).execute(user.getPhoto());
+        if (user.getPhoto() != null && !(user.getPhoto().trim().isEmpty())) {
+            Picasso.with(getRootView().getContext()).load(user.getPhoto()).fit().centerCrop().into(photoImageView);
+        }
 
         nameField.setText(user.getName());
         emailField.setText(user.getEmail());
@@ -99,6 +108,12 @@ public class UserProfileView extends GenericView {
         } else {
             workerSpinner.setSelection(0);
         }
+    }
+
+    public void setNewUserPhoto(Uri uri) {
+        userPhotoUri = uri;
+
+        Picasso.with(getRootView().getContext()).load(uri).into(photoImageView);
     }
 
 }

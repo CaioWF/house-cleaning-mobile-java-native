@@ -1,10 +1,6 @@
 package br.com.ufc.quixada.housecleaning.adapter;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +10,16 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import br.com.ufc.quixada.housecleaning.R;
 import br.com.ufc.quixada.housecleaning.RequestCleaningServiceActivity;
-import br.com.ufc.quixada.housecleaning.network.DownloadImage;
 import br.com.ufc.quixada.housecleaning.transactions.User;
 
 public class WorkerListAdapter extends RecyclerView.Adapter<WorkerListAdapter.WorkerListViewHolder> implements Filterable {
@@ -46,7 +46,7 @@ public class WorkerListAdapter extends RecyclerView.Adapter<WorkerListAdapter.Wo
 
     public WorkerListAdapter(List<User> workers) {
         this.workers = workers;
-        workersFull = new ArrayList<>(workers);
+        this.workersFull = new ArrayList<>(workers);
     }
 
     public void updateWorkersFull() {
@@ -66,10 +66,12 @@ public class WorkerListAdapter extends RecyclerView.Adapter<WorkerListAdapter.Wo
     public void onBindViewHolder(@NonNull WorkerListViewHolder holder, int position) {
         final User worker = workers.get(position);
 
+        if (worker.getPhoto() != null && !(worker.getPhoto().trim().isEmpty())) {
+            Picasso.with(holder.itemView.getContext()).load(worker.getPhoto()).fit().centerCrop().into(holder.workerPhoto);
+        }
+
         holder.workerName.setText(worker.getName());
         holder.workerRate.setText(worker.getRate() + " ★");
-        // Load Photo
-        // new DownloadImage(holder.workerPhoto).execute(worker.getPhoto());
 
         holder.hireButton.setOnClickListener(new View.OnClickListener() {
             @Override

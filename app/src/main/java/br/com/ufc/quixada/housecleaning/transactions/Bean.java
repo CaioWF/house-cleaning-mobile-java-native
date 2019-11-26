@@ -1,21 +1,20 @@
 package br.com.ufc.quixada.housecleaning.transactions;
 
-public class Bean {
+import java.util.UUID;
 
-    private static int nextId = 1;
-    private int id;
+public abstract class Bean {
+
+    private String id;
 
     public Bean() {
-        this.id = nextId;
-
-        nextId++;
+        id = UUID.randomUUID().toString();
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

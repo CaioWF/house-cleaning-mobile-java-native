@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class CleaningService extends Bean {
 
-    private float cleaningAreaSize;
+    private float numberOfRooms;
     private float price;
     private Date date;
     private User responsible;
@@ -17,8 +17,8 @@ public class CleaningService extends Bean {
 
     }
 
-    public CleaningService(float cleaningAreaSize, float price, Date date, User responsible, User requester, Address address, Status status, String additionalComments) {
-        this.cleaningAreaSize = cleaningAreaSize;
+    public CleaningService(float numberOfRooms, float price, Date date, User responsible, User requester, Address address, Status status, String additionalComments) {
+        this.numberOfRooms = numberOfRooms;
         this.price = price;
         this.date = date;
         this.responsible = responsible;
@@ -28,12 +28,12 @@ public class CleaningService extends Bean {
         this.additionalComments = additionalComments;
     }
 
-    public float getCleaningAreaSize() {
-        return cleaningAreaSize;
+    public float getNumberOfRooms() {
+        return numberOfRooms;
     }
 
-    public void setCleaningAreaSize(float cleaningAreaSize) {
-        this.cleaningAreaSize = cleaningAreaSize;
+    public void setNumberOfRooms(float numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
     }
 
     public float getPrice() {

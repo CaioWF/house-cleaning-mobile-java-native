@@ -6,7 +6,7 @@
     android:layout_marginBottom="?attr/actionBarSize"
     tools:context=".HistoryFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cleaning_service_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

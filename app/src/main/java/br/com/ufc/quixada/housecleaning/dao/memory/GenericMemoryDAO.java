@@ -1,7 +1,5 @@
 package br.com.ufc.quixada.housecleaning.dao.memory;
 
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,9 +33,9 @@ public class GenericMemoryDAO<T extends Bean> implements GenericDAO<T> {
     }
 
     @Override
-    public T findById(int id) {
+    public T findById(String id) {
         for (T t : tList) {
-            if (t.getId() == id)
+            if (t.getId().equals(id))
                 return t;
         }
 

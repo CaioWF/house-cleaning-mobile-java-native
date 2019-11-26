@@ -1,5 +1,7 @@
 package br.com.ufc.quixada.housecleaning.presenter;
 
-public interface PlaceEventListener {
+import br.com.ufc.quixada.housecleaning.transactions.Place;
+
+public interface PlaceEventListener extends EventListener<Place> {
 
 }

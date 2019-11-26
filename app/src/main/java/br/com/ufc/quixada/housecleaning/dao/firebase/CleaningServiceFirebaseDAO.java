@@ -1,4 +1,4 @@
-package br.com.ufc.quixada.housecleaning.dao.memory;
+package br.com.ufc.quixada.housecleaning.dao.firebase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,19 +7,17 @@ import br.com.ufc.quixada.housecleaning.dao.CleaningServiceDAO;
 import br.com.ufc.quixada.housecleaning.presenter.CleaningServiceEventListener;
 import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
 
-public class CleaningServiceMemoryDAO extends GenericMemoryDAO<CleaningService> implements CleaningServiceDAO {
+public class CleaningServiceFirebaseDAO extends GenericFirebaseDAO<CleaningService> implements CleaningServiceDAO {
 
     private static CleaningServiceDAO cleaningServiceDAO;
-    private CleaningServiceEventListener cleaningServiceEventListener;
 
-    private CleaningServiceMemoryDAO(CleaningServiceEventListener cleaningServiceEventListener) {
-        super();
-        this.cleaningServiceEventListener = cleaningServiceEventListener;
+    private CleaningServiceFirebaseDAO(CleaningServiceEventListener eventListener) {
+        super("cleaning_services", eventListener, CleaningService.class);
     }
 
-    public static CleaningServiceDAO getInstance(CleaningServiceEventListener cleaningServiceEventListener) {
+    public static CleaningServiceDAO getInstance(CleaningServiceEventListener eventListener) {
         if (cleaningServiceDAO == null)
-            cleaningServiceDAO = new CleaningServiceMemoryDAO(cleaningServiceEventListener);
+            cleaningServiceDAO = new CleaningServiceFirebaseDAO(eventListener);
 
         return cleaningServiceDAO;
     }

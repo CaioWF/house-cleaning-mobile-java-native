@@ -12,7 +12,7 @@ public interface GenericDAO<T extends Bean> {
 
     void delete(T t);
 
-    T findById(int id);
+    T findById(String id);
 
     List<T> findAll();
 

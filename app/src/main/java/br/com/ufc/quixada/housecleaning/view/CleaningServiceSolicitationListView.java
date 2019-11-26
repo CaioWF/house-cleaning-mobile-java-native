@@ -1,13 +1,13 @@
 package br.com.ufc.quixada.housecleaning.view;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import br.com.ufc.quixada.housecleaning.R;
 import br.com.ufc.quixada.housecleaning.adapter.CleaningServiceSolicitationListAdapter;
 import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
@@ -45,8 +45,7 @@ public class CleaningServiceSolicitationListView extends GenericView {
         if (cleaningServices.isEmpty()) {
             cleaningServiceSolicitationListRecyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             cleaningServiceSolicitationListRecyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
         }
@@ -63,8 +62,7 @@ public class CleaningServiceSolicitationListView extends GenericView {
         if (cleaningServices.isEmpty()) {
             cleaningServiceSolicitationListRecyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             cleaningServiceSolicitationListRecyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
         }
@@ -72,6 +70,12 @@ public class CleaningServiceSolicitationListView extends GenericView {
         for (CleaningService cleaningService : cleaningServices) {
             this.cleaningServices.add(cleaningService);
         }
+
+        cleaningServiceSolicitationListAdapter.notifyDataSetChanged();
+    }
+
+    public void addCleaningServiceToList(CleaningService cleaningService) {
+        this.cleaningServices.add(cleaningService);
 
         cleaningServiceSolicitationListAdapter.notifyDataSetChanged();
     }

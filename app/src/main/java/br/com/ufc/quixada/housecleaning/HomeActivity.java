@@ -3,24 +3,22 @@ package br.com.ufc.quixada.housecleaning;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import br.com.ufc.quixada.housecleaning.adapter.WorkerListAdapter;
-import br.com.ufc.quixada.housecleaning.presenter.CleaningServiceEventListener;
-import br.com.ufc.quixada.housecleaning.presenter.UserEventListener;
 
 public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener,
-        WorkerListFragment.OnFragmentInteractionListener, UserEventListener,
-        HistoryFragment.OnFragmentInteractionListener, CleaningServiceSolicitationListFragment.OnFragmentInteractionListener, CleaningServiceEventListener {
+        WorkerListFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener, CleaningServiceSolicitationListFragment.OnFragmentInteractionListener {
 
     private BottomNavigationView bottomNavigationView;
     private Toolbar toolbar;
@@ -72,19 +70,23 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         switch (item.getItemId()) {
             case R.id.menu_profile:
                 Intent userProfile = new Intent(getApplicationContext(), UserProfileActivity.class);
-
                 startActivity(userProfile);
 
                 return true;
+
             case R.id.menu_about:
                 Intent about = new Intent(getApplicationContext(), AboutActivity.class);
                 startActivity(about);
+
                 return true;
+
             case R.id.menu_logout:
                 Intent login = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(login);
                 finish();
+
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -101,18 +103,23 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
                 selectedFragment = new HistoryFragment();
                 tag = "fragHistory";
                 getSupportActionBar().setTitle("House Cleaning");
+
                 break;
+
             case R.id.id_bottom_workers:
                 showSearchButton();
                 selectedFragment = new WorkerListFragment();
                 tag = "fragWorkers";
                 getSupportActionBar().setTitle("Solicitar Serviço");
+
                 break;
+
             case R.id.id_bottom_requestes:
                 hideSearchButton();
                 selectedFragment = new CleaningServiceSolicitationListFragment();
                 tag = "fragRequests";
                 getSupportActionBar().setTitle("Solicitações de Serviço");
+
                 break;
         }
         openFragment(selectedFragment, tag);
@@ -120,11 +127,11 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     private void hideSearchButton() {
-        MenuItem item = toolbar.getMenu().findItem(R.id.menu_search).setVisible(false);
+        toolbar.getMenu().findItem(R.id.menu_search).setVisible(false);
     }
 
     private void showSearchButton() {
-        MenuItem item = toolbar.getMenu().findItem(R.id.menu_search).setVisible(true);
+        toolbar.getMenu().findItem(R.id.menu_search).setVisible(true);
     }
 
     private void openFragment(Fragment fragment, String tag) {
@@ -138,4 +145,5 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     public void onFragmentInteraction(Uri uri) {
 
     }
+
 }

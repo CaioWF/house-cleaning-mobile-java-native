@@ -3,19 +3,19 @@ package br.com.ufc.quixada.housecleaning;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
 import java.util.List;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import br.com.ufc.quixada.housecleaning.dao.CleaningServiceDAO;
 import br.com.ufc.quixada.housecleaning.dao.PlaceDAO;
 import br.com.ufc.quixada.housecleaning.dao.UserDAO;
-import br.com.ufc.quixada.housecleaning.dao.memory.CleaningServiceMemoryDAO;
-import br.com.ufc.quixada.housecleaning.dao.memory.PlaceMemoryDAO;
-import br.com.ufc.quixada.housecleaning.dao.memory.UserMemoryDAO;
+import br.com.ufc.quixada.housecleaning.dao.firebase.CleaningServiceFirebaseDAO;
+import br.com.ufc.quixada.housecleaning.dao.firebase.PlaceFirebaseDAO;
+import br.com.ufc.quixada.housecleaning.dao.firebase.UserFirebaseDAO;
 import br.com.ufc.quixada.housecleaning.presenter.CleaningServiceEventListener;
 import br.com.ufc.quixada.housecleaning.presenter.PlaceEventListener;
 import br.com.ufc.quixada.housecleaning.presenter.UserEventListener;
@@ -26,7 +26,7 @@ import br.com.ufc.quixada.housecleaning.util.SessionUtil;
 import br.com.ufc.quixada.housecleaning.view.RequestCleaningServiceView;
 import br.com.ufc.quixada.housecleaning.view.eventlistener.RequestCleaningServiceViewEventListener;
 
-public class RequestCleaningServiceActivity extends AppCompatActivity implements UserEventListener, PlaceEventListener, CleaningServiceEventListener, RequestCleaningServiceViewEventListener {
+public class RequestCleaningServiceActivity extends AppCompatActivity implements RequestCleaningServiceViewEventListener {
 
     private UserDAO userDAO;
     private PlaceDAO placeDAO;
@@ -44,11 +44,56 @@ public class RequestCleaningServiceActivity extends AppCompatActivity implements
         actionBar.setTitle("Solicitar Serviço de Limpeza");
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#62DBA8")));
 
-        userDAO = UserMemoryDAO.getInstance(this);
+        userDAO = UserFirebaseDAO.getInstance(new UserEventListener() {
+            @Override
+            public void onAdded(User user) {
 
-        placeDAO = PlaceMemoryDAO.getInstance(this);
+            }
 
-        cleaningServiceDAO = CleaningServiceMemoryDAO.getInstance(this);
+            @Override
+            public void onChanged(User user) {
+
+            }
+
+            @Override
+            public void onRemoved(User user) {
+
+            }
+        });
+
+        placeDAO = PlaceFirebaseDAO.getInstance(new PlaceEventListener() {
+            @Override
+            public void onAdded(Place place) {
+
+            }
+
+            @Override
+            public void onChanged(Place place) {
+
+            }
+
+            @Override
+            public void onRemoved(Place place) {
+
+            }
+        });
+
+        cleaningServiceDAO = CleaningServiceFirebaseDAO.getInstance(new CleaningServiceEventListener() {
+            @Override
+            public void onAdded(CleaningService cleaningService) {
+
+            }
+
+            @Override
+            public void onChanged(CleaningService cleaningService) {
+
+            }
+
+            @Override
+            public void onRemoved(CleaningService cleaningService) {
+
+            }
+        });
 
         View rootView = getWindow().getDecorView().getRootView();
 
@@ -74,7 +119,7 @@ public class RequestCleaningServiceActivity extends AppCompatActivity implements
 
     @Override
     public void onClickSave(CleaningService cleaningService) {
-        int responsibleId = getIntent().getExtras().getInt("user_id");
+        String responsibleId = getIntent().getExtras().getString("user_id");
 
         User responsible = userDAO.findById(responsibleId);
         User requester = getCurrentUser();
@@ -89,7 +134,7 @@ public class RequestCleaningServiceActivity extends AppCompatActivity implements
     }
 
     private User getCurrentUser() {
-        int currentUserId = SessionUtil.getCurrentUserId(this);
+        String currentUserId = SessionUtil.getCurrentUserId(this);
 
         return userDAO.findById(currentUserId);
     }

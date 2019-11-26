@@ -5,7 +5,12 @@ public class Place extends Bean {
     private String city;
     private String neighborhood;
 
+    public Place() {
+        super();
+    }
+
     public Place(String city, String neighborhood) {
+        this();
         this.city = city;
         this.neighborhood = neighborhood;
     }

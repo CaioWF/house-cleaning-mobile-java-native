@@ -8,4 +8,6 @@ public interface UserDAO extends GenericDAO<User> {
 
     List<User> findAllWorkers();
 
+    User findByEmail(String email);
+
 }

@@ -1,89 +1,56 @@
 package br.com.ufc.quixada.housecleaning;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.Date;
-import java.util.List;
-
-import br.com.ufc.quixada.housecleaning.dao.CleaningServiceDAO;
+import androidx.appcompat.app.AppCompatActivity;
 import br.com.ufc.quixada.housecleaning.dao.PlaceDAO;
 import br.com.ufc.quixada.housecleaning.dao.UserDAO;
-import br.com.ufc.quixada.housecleaning.dao.memory.CleaningServiceMemoryDAO;
-import br.com.ufc.quixada.housecleaning.dao.memory.PlaceMemoryDAO;
-import br.com.ufc.quixada.housecleaning.dao.memory.UserMemoryDAO;
-import br.com.ufc.quixada.housecleaning.presenter.CleaningServiceEventListener;
+import br.com.ufc.quixada.housecleaning.dao.firebase.PlaceFirebaseDAO;
+import br.com.ufc.quixada.housecleaning.dao.firebase.UserFirebaseDAO;
 import br.com.ufc.quixada.housecleaning.presenter.PlaceEventListener;
 import br.com.ufc.quixada.housecleaning.presenter.UserEventListener;
-import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
 import br.com.ufc.quixada.housecleaning.transactions.Place;
 import br.com.ufc.quixada.housecleaning.transactions.User;
+import br.com.ufc.quixada.housecleaning.util.SessionUtil;
+import br.com.ufc.quixada.housecleaning.view.LoginView;
+import br.com.ufc.quixada.housecleaning.view.eventlistener.LoginViewEventListener;
 
-public class LoginActivity extends AppCompatActivity implements UserEventListener, CleaningServiceEventListener, PlaceEventListener {
+public class LoginActivity extends AppCompatActivity implements LoginViewEventListener {
 
-    private Button btnLogin;
-    private Button btnGoToRegistration;
-    private EditText textEmail;
-    private EditText textPass;
-    private static final String ARQUIVO_PREFERENCIA = "session_settings";
-    private UserDAO userDAO = UserMemoryDAO.getInstance(this);
+    private static final String PREFERENCES_FILE = "session_settings";
 
+    private UserDAO userDAO;
+    private LoginView loginView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        initializeDatabase();
-
-        textEmail = findViewById(R.id.id_email_login);
-        textPass = findViewById(R.id.id_pass_login);
-
-        btnLogin = findViewById(R.id.id_btn_login);
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        userDAO = UserFirebaseDAO.getInstance(new UserEventListener() {
             @Override
-            public void onClick(View v) {
-                String email = textEmail.getText().toString();
-                String password = textPass.getText().toString();
-                List<User> users = userDAO.findAll();
-                User user = null;
-                for (User u : users) {
-                    if (email.equals(u.getEmail()) && password.equals(u.getPassword())) {
-                        user = u;
-                    }
-                }
-                if (user != null) {
-                    SharedPreferences sharedPreferences = getSharedPreferences(ARQUIVO_PREFERENCIA, 0);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putInt("user_id", user.getId());
-                    editor.putString("name", user.getName());
-                    editor.putString("email", user.getEmail());
-                    editor.putString("pass", user.getPassword());
-                    editor.commit();
-                    Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-                    startActivity(i);
-                    finish();
-                } else {
-                    Toast.makeText(LoginActivity.this, "Você errou o email ou senha", Toast.LENGTH_LONG).show();
-                }
+            public void onAdded(User user) {
+
+            }
+
+            @Override
+            public void onChanged(User user) {
+
+            }
+
+            @Override
+            public void onRemoved(User user) {
+
             }
         });
 
-        btnGoToRegistration = findViewById(R.id.id_btn_ir_para_cadastro);
-        btnGoToRegistration.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), RegistrationActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
+        View rootView = getWindow().getDecorView().getRootView();
+
+        loginView = new LoginView(this);
+        loginView.initialize(rootView);
     }
 
     @Override
@@ -91,48 +58,33 @@ public class LoginActivity extends AppCompatActivity implements UserEventListene
 
     }
 
-    private void initializeDatabase() {
-//      Users
+    public LoginActivity() {
+        super();
+    }
 
-        UserDAO userDAO = UserMemoryDAO.getInstance(this);
+    @Override
+    public void onClickLoginButton(String email, String password) {
+        User user = userDAO.findByEmail(email);
 
-        User user1 = new User("", "John Doe", "john", "doe", true, 4.5f);
-        User user2 = new User("", "Jane Doe", "jane", "doe", false, 4.5f);
+        if (user != null && user.getPassword().equals(password)) {
+            SessionUtil.setCurrentUserId(this, user.getId());
 
-        userDAO.create(user1);
-        userDAO.create(user1);
-        userDAO.create(user1);
-        userDAO.create(user1);
-        userDAO.create(user1);
-        userDAO.create(user2);
-        userDAO.create(user2);
-        userDAO.create(user2);
-        userDAO.create(user2);
+            Intent i = new Intent(getApplicationContext(), HomeActivity.class);
 
+            startActivity(i);
 
-//      Cleaning Services
+            finish();
+        } else {
+            Toast.makeText(LoginActivity.this, "Você errou o email ou senha", Toast.LENGTH_LONG).show();
+        }
+    }
 
-        CleaningServiceDAO cleaningServiceDAO = CleaningServiceMemoryDAO.getInstance(this);
+    @Override
+    public void onClickGoToRegistrationButton() {
+        Intent i = new Intent(getApplicationContext(), RegistrationActivity.class);
 
-        CleaningService cleaningService = new CleaningService();
-        cleaningService.setDate(new Date());
-        cleaningService.setResponsible(user1);
-        cleaningService.setRequester(user2);
-        cleaningService.setStatus(CleaningService.Status.PENDENT);
+        startActivity(i);
 
-        cleaningServiceDAO.create(cleaningService);
-        cleaningServiceDAO.create(cleaningService);
-        cleaningServiceDAO.create(cleaningService);
-        cleaningServiceDAO.create(cleaningService);
-
-//      Places
-
-        PlaceDAO placeDAO = PlaceMemoryDAO.getInstance(this);
-
-        placeDAO.create(new Place("London", "Soho"));
-        placeDAO.create(new Place("London", "Soho"));
-        placeDAO.create(new Place("London", "Soho"));
-        placeDAO.create(new Place("London", "Soho"));
-        placeDAO.create(new Place("London", "Soho"));
+        finish();
     }
 }

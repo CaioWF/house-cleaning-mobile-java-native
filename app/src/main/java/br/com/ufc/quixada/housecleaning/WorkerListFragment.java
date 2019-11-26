@@ -3,17 +3,18 @@ package br.com.ufc.quixada.housecleaning;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
+import androidx.fragment.app.Fragment;
 import br.com.ufc.quixada.housecleaning.dao.UserDAO;
-import br.com.ufc.quixada.housecleaning.dao.memory.UserMemoryDAO;
+import br.com.ufc.quixada.housecleaning.dao.firebase.UserFirebaseDAO;
 import br.com.ufc.quixada.housecleaning.presenter.UserEventListener;
 import br.com.ufc.quixada.housecleaning.transactions.User;
+import br.com.ufc.quixada.housecleaning.util.SessionUtil;
 import br.com.ufc.quixada.housecleaning.view.WorkerListView;
 
 /**
@@ -24,7 +25,7 @@ import br.com.ufc.quixada.housecleaning.view.WorkerListView;
  * Use the {@link WorkerListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WorkerListFragment extends Fragment implements UserEventListener {
+public class WorkerListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,7 +37,7 @@ public class WorkerListFragment extends Fragment implements UserEventListener {
 
     private OnFragmentInteractionListener mListener;
 
-    private UserDAO userDAO = UserMemoryDAO.getInstance(this);
+    private UserDAO userDAO;
     private WorkerListView workerListView;
 
     public WorkerListFragment() {
@@ -76,13 +77,44 @@ public class WorkerListFragment extends Fragment implements UserEventListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_worker_list, container, false);
 
+        userDAO = UserFirebaseDAO.getInstance(new UserEventListener() {
+            @Override
+            public void onAdded(User user) {
+                workerListView.addWorkerToList(user);
+            }
+
+            @Override
+            public void onChanged(User user) {
+
+            }
+
+            @Override
+            public void onRemoved(User user) {
+
+            }
+        });
+
         workerListView = new WorkerListView();
         workerListView.initialize(view);
 
-        List<User> users = userDAO.findAllWorkers();
-        workerListView.updateWorkerList(users);
+        List<User> workers = getAllWorkersExceptCurrentUser(view.getContext());
+        workerListView.updateWorkerList(workers);
 
         return view;
+    }
+
+    private List<User> getAllWorkersExceptCurrentUser(Context context) {
+        List<User> workers = userDAO.findAllWorkers();
+
+        String currentUserId = SessionUtil.getCurrentUserId(context);
+
+        for (User worker : workers) {
+            if (worker.getId().equals(currentUserId)) {
+                workers.remove(worker);
+            }
+        }
+
+        return workers;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
