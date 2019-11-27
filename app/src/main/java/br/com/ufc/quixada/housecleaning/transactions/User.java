@@ -34,7 +34,7 @@ public class User extends Bean {
     }
 
     public User() {
-
+        super();
     }
 
     public String getPhoto() {

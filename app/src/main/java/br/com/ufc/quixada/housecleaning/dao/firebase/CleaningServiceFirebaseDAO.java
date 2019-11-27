@@ -1,5 +1,7 @@
 package br.com.ufc.quixada.housecleaning.dao.firebase;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class CleaningServiceFirebaseDAO extends GenericFirebaseDAO<CleaningServi
         List<CleaningService> cleaningServices = new ArrayList<>();
 
         for (CleaningService cleaningService : findAll()) {
-            if (responsibleId == cleaningService.getResponsible().getId())
+            if (responsibleId.equals(cleaningService.getResponsible().getId()))
                 cleaningServices.add(cleaningService);
         }
 
@@ -39,7 +41,9 @@ public class CleaningServiceFirebaseDAO extends GenericFirebaseDAO<CleaningServi
         List<CleaningService> cleaningServices = new ArrayList<>();
 
         for (CleaningService cleaningService : findAll()) {
-            if (requesterId == cleaningService.getRequester().getId())
+            Log.d("TEST", requesterId + " | " + cleaningService.getRequester().getId());
+
+            if (requesterId.equals(cleaningService.getRequester().getId()))
                 cleaningServices.add(cleaningService);
         }
 

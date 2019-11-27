@@ -80,7 +80,7 @@ public class HistoryFragment extends Fragment {
         cleaningServiceDAO = CleaningServiceFirebaseDAO.getInstance(new CleaningServiceEventListener() {
             @Override
             public void onAdded(CleaningService cleaningService) {
-                cleaningServicesListView.addCleaningServiceToList(cleaningService);
+
             }
 
             @Override

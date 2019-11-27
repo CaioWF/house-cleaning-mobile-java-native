@@ -12,7 +12,6 @@ import java.util.List;
 import androidx.fragment.app.Fragment;
 import br.com.ufc.quixada.housecleaning.dao.CleaningServiceDAO;
 import br.com.ufc.quixada.housecleaning.dao.firebase.CleaningServiceFirebaseDAO;
-import br.com.ufc.quixada.housecleaning.dao.memory.CleaningServiceMemoryDAO;
 import br.com.ufc.quixada.housecleaning.presenter.CleaningServiceEventListener;
 import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
 import br.com.ufc.quixada.housecleaning.util.SessionUtil;
@@ -83,7 +82,7 @@ public class CleaningServiceSolicitationListFragment extends Fragment implements
         cleaningServiceDAO = CleaningServiceFirebaseDAO.getInstance(new CleaningServiceEventListener() {
             @Override
             public void onAdded(CleaningService cleaningService) {
-                cleaningServiceSolicitationListView.addCleaningServiceToList(cleaningService);
+
             }
 
             @Override

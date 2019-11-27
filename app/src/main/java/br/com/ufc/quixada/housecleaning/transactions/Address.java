@@ -7,6 +7,10 @@ public class Address {
     private int number;
     private String complement;
 
+    public Address() {
+
+    }
+
     public Address(Place place, String street, int number, String complement) {
         this.place = place;
         this.street = street;

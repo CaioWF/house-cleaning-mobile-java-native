@@ -14,7 +14,7 @@ public class CleaningService extends Bean {
     private String additionalComments;
 
     public CleaningService() {
-
+        super();
     }
 
     public CleaningService(float numberOfRooms, float price, Date date, User responsible, User requester, Address address, Status status, String additionalComments) {
