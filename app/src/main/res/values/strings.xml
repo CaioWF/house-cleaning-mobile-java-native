@@ -45,4 +45,9 @@
     <string name="user_profile_worker">Quero Prestar Serviços</string>
     <string name="user_profile_email">Email</string>
     <string name="user_profile_password">Senha</string>
+    <string name="title_dialog_camera">Escolha uma opção</string>
+    <string-array name="camera_options">
+        <item>Carregar da galeria</item>
+        <item>Abrir câmera</item>
+    </string-array>
 </resources>

@@ -1,7 +1,11 @@
 package br.com.ufc.quixada.housecleaning;
 
+import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -11,13 +15,17 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import br.com.ufc.quixada.housecleaning.dao.UserDAO;
 import br.com.ufc.quixada.housecleaning.dao.firebase.UserFirebaseDAO;
 import br.com.ufc.quixada.housecleaning.presenter.UserEventListener;
 import br.com.ufc.quixada.housecleaning.transactions.User;
+import br.com.ufc.quixada.housecleaning.util.CameraUtil;
+import br.com.ufc.quixada.housecleaning.util.ExternalStorageUtil;
 import br.com.ufc.quixada.housecleaning.util.SessionUtil;
 import br.com.ufc.quixada.housecleaning.util.StorageUtil;
 import br.com.ufc.quixada.housecleaning.view.UserProfileView;
@@ -26,9 +34,14 @@ import br.com.ufc.quixada.housecleaning.view.eventlistener.UserProfileViewEventL
 public class UserProfileActivity extends AppCompatActivity implements UserProfileViewEventListener {
 
     private static final int IMAGE_PICK_CODE = 1;
+    private static final int REQUEST_CAMERA_CODE = 2;
+    private static final int TAKE_A_PICTURE_CODE = 3;
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE_CODE = 4;
 
     private UserDAO userDAO;
     private UserProfileView userProfileView;
+    private CameraUtil cameraUtil;
+    private ExternalStorageUtil externalStorageUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +76,9 @@ public class UserProfileActivity extends AppCompatActivity implements UserProfil
         userProfileView = new UserProfileView(this);
         userProfileView.initialize(rootView);
         userProfileView.loadUserProfile(getCurrentUser());
+
+        cameraUtil = new CameraUtil();
+        externalStorageUtil = new ExternalStorageUtil();
     }
 
     @Override
@@ -86,7 +102,8 @@ public class UserProfileActivity extends AppCompatActivity implements UserProfil
 
     @Override
     public void onClickLoadPhotoButton() {
-        pickImageFromGallery();
+        Dialog dialog = onCreateDialog();
+        dialog.show();
     }
 
     @Override
@@ -130,7 +147,13 @@ public class UserProfileActivity extends AppCompatActivity implements UserProfil
             Uri uri = data.getData();
 
             userProfileView.setNewUserPhoto(uri);
+        } else if (requestCode == TAKE_A_PICTURE_CODE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap image = (Bitmap) extras.get("data");
+            Uri uri = externalStorageUtil.getImageUri(this, image);
+            userProfileView.setNewUserPhoto(uri);
         }
+
     }
 
     private void pickImageFromGallery() {
@@ -148,5 +171,52 @@ public class UserProfileActivity extends AppCompatActivity implements UserProfil
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
 
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
+    public Dialog onCreateDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.title_dialog_camera)
+                .setItems(R.array.camera_options, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                pickImageFromGallery();
+                                break;
+                            case 1:
+                                openCamera();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+        return builder.create();
+    }
+
+    public void openCamera() {
+        if (!cameraUtil.checkCameraPermission(UserProfileActivity.this)
+                || !externalStorageUtil.checkExternalStoragePermission(UserProfileActivity.this)) {
+            cameraUtil.requestCameraPermission(this);
+        } else {
+            cameraUtil.takeAPicture(this);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == REQUEST_CAMERA_CODE){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if(!externalStorageUtil.checkExternalStoragePermission(this)) {
+                    externalStorageUtil.requestExternalStoragePermission(this);
+                } else {
+                    cameraUtil.takeAPicture(this);
+                }
+            }
+        } else if (requestCode == REQUEST_WRITE_EXTERNAL_STORAGE_CODE) {
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                cameraUtil.takeAPicture(this);
+            }
+        }
     }
 }
