@@ -14,9 +14,12 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.ufc.quixada.housecleaning.R;
 import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
+import br.com.ufc.quixada.housecleaning.view.eventlistener.HistoryViewEventListener;
 
 public class CleaningServiceListAdapter extends RecyclerView.Adapter<CleaningServiceListAdapter.CleaningServiceListViewHolder> {
+
     private List<CleaningService> cleaningServices;
+    private HistoryViewEventListener historyViewEventListener;
 
     public static class CleaningServiceListViewHolder extends RecyclerView.ViewHolder {
         public CardView cleaningServiceCardView;
@@ -24,7 +27,7 @@ public class CleaningServiceListAdapter extends RecyclerView.Adapter<CleaningSer
         public TextView cleaningServiceResponsible;
         public TextView cleaningServiceStatus;
         public TextView cleaningServicePrice;
-        public Button seeDetails;
+        public Button cleaningServiceRatingButton;
 
         public CleaningServiceListViewHolder(View view) {
             super(view);
@@ -33,11 +36,13 @@ public class CleaningServiceListAdapter extends RecyclerView.Adapter<CleaningSer
             cleaningServiceResponsible = view.findViewById(R.id.history_item_responsible);
             cleaningServiceStatus = view.findViewById(R.id.history_item_status);
             cleaningServicePrice = view.findViewById(R.id.history_item_price);
+            cleaningServiceRatingButton = view.findViewById(R.id.cleaning_service_rating_button);
         }
     }
 
-    public CleaningServiceListAdapter(List<CleaningService> cleaningServices) {
+    public CleaningServiceListAdapter(List<CleaningService> cleaningServices, HistoryViewEventListener historyViewEventListener) {
         this.cleaningServices = cleaningServices;
+        this.historyViewEventListener = historyViewEventListener;
     }
 
     @NonNull
@@ -51,17 +56,32 @@ public class CleaningServiceListAdapter extends RecyclerView.Adapter<CleaningSer
 
     @Override
     public void onBindViewHolder(@NonNull CleaningServiceListViewHolder holder, int position) {
-        CleaningService cleaningService = cleaningServices.get(position);
+        final CleaningService cleaningService = cleaningServices.get(position);
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String dateString = formatter.format(cleaningService.getDate());
 
         holder.cleaningServiceDate.setText(dateString);
+
         holder.cleaningServiceResponsible.setText(cleaningService.getResponsible().getName());
 
         holder.cleaningServiceStatus.setText(cleaningService.getStatus().toString());
-        holder.cleaningServicePrice.setText("R$ " + String.valueOf(cleaningService.getPrice()).replace(".", ",") + "0");
 
+        String price = "R$ " + String.valueOf(cleaningService.getPrice()).replace(".", ",") + "0";
+        holder.cleaningServicePrice.setText(price);
+
+        if (cleaningService.getStatus() == CleaningService.Status.DONE) {
+            holder.cleaningServiceRatingButton.setVisibility(View.VISIBLE);
+        } else {
+            holder.cleaningServiceRatingButton.setVisibility(View.GONE);
+        }
+
+        holder.cleaningServiceRatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                historyViewEventListener.onClickRateCleaningService(cleaningService);
+            }
+        });
     }
 
     @Override

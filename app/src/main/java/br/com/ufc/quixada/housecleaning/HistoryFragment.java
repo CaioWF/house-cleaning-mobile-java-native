@@ -1,6 +1,8 @@
 package br.com.ufc.quixada.housecleaning;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,11 +13,16 @@ import java.util.List;
 
 import androidx.fragment.app.Fragment;
 import br.com.ufc.quixada.housecleaning.dao.CleaningServiceDAO;
+import br.com.ufc.quixada.housecleaning.dao.UserDAO;
 import br.com.ufc.quixada.housecleaning.dao.firebase.CleaningServiceFirebaseDAO;
+import br.com.ufc.quixada.housecleaning.dao.firebase.UserFirebaseDAO;
 import br.com.ufc.quixada.housecleaning.presenter.CleaningServiceEventListener;
+import br.com.ufc.quixada.housecleaning.presenter.UserEventListener;
 import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
+import br.com.ufc.quixada.housecleaning.transactions.User;
 import br.com.ufc.quixada.housecleaning.util.SessionUtil;
-import br.com.ufc.quixada.housecleaning.view.CleaningServicesListView;
+import br.com.ufc.quixada.housecleaning.view.HistoryView;
+import br.com.ufc.quixada.housecleaning.view.eventlistener.HistoryViewEventListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,7 +32,7 @@ import br.com.ufc.quixada.housecleaning.view.CleaningServicesListView;
  * Use the {@link HistoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends Fragment implements HistoryViewEventListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -37,8 +44,9 @@ public class HistoryFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    private UserDAO userDAO;
     private CleaningServiceDAO cleaningServiceDAO;
-    private CleaningServicesListView cleaningServicesListView;
+    private HistoryView historyView;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -75,12 +83,31 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_history, container, false);
+        final View view = inflater.inflate(R.layout.fragment_history, container, false);
+
+        userDAO = UserFirebaseDAO.getInstance(new UserEventListener() {
+            @Override
+            public void onAdded(User user) {
+
+            }
+
+            @Override
+            public void onChanged(User user) {
+
+            }
+
+            @Override
+            public void onRemoved(User user) {
+
+            }
+        });
 
         cleaningServiceDAO = CleaningServiceFirebaseDAO.getInstance(new CleaningServiceEventListener() {
             @Override
             public void onAdded(CleaningService cleaningService) {
-
+                if (cleaningService.getRequester().getId().equals(SessionUtil.getCurrentUserId(view.getContext()))) {
+                    historyView.addCleaningServiceToList(cleaningService);
+                }
             }
 
             @Override
@@ -94,13 +121,10 @@ public class HistoryFragment extends Fragment {
             }
         });
 
-        cleaningServicesListView = new CleaningServicesListView();
-        cleaningServicesListView.initialize(view);
+        historyView = new HistoryView(this);
+        historyView.initialize(view);
 
-        List<CleaningService> cleaningServices = cleaningServiceDAO.findAllByRequester(SessionUtil.getCurrentUserId(view.getContext()));
-        for (CleaningService cleaningService : cleaningServices) {
-            cleaningServicesListView.addCleaningServiceToList(cleaningService);
-        }
+        updateCleaningServiceList();
 
         return view;
     }
@@ -127,6 +151,56 @@ public class HistoryFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClickRateCleaningService(final CleaningService cleaningService) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        String[] ratingOptions = {"1 ★", "2 ★", "3 ★", "4 ★", "5 ★"};
+
+        builder.setTitle(R.string.rate_service_label).setSingleChoiceItems(ratingOptions, 0, null).setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Float[] ratingValues = {1f, 2f, 3f, 4f, 5f};
+                int checkedItemPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+
+                User worker = cleaningService.getResponsible();
+
+                rateWorker(worker.getId(), ratingValues[checkedItemPosition]);
+
+                setCleaningServiceAsRated(cleaningService);
+
+                updateCleaningServiceList();
+
+                dialog.dismiss();
+            }
+        }).setNegativeButton(R.string.cancel_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
+    }
+
+    private void rateWorker(String userId, Float rating) {
+        User worker = userDAO.findById(userId);
+
+        worker.addRating(rating);
+
+        userDAO.update(worker);
+    }
+
+    private void setCleaningServiceAsRated(CleaningService cleaningService) {
+        cleaningService.setStatus(CleaningService.Status.RATED);
+
+        cleaningServiceDAO.update(cleaningService);
+    }
+
+    private void updateCleaningServiceList() {
+        List<CleaningService> cleaningServices = cleaningServiceDAO.findAllByRequester(SessionUtil.getCurrentUserId(getContext()));
+
+        historyView.updateCleaningServiceList(cleaningServices);
     }
 
     /**

@@ -1,5 +1,8 @@
 package br.com.ufc.quixada.housecleaning.transactions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User extends Bean {
 
     private String photo;
@@ -7,34 +10,22 @@ public class User extends Bean {
     private String email;
     private String password;
     private boolean worker;
-    private float rate;
-
-    public User(String photo, String name, String email, String password, boolean worker, float rate) {
-        super();
-        this.photo = photo;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.worker = worker;
-        this.rate = rate;
-    }
-
-    public User(/*String photo, */String name, String email, String password) {
-        super();
-        //this.photo = photo;
-        this.name = name;
-        this.password = password;
-        this.email = email;
-    }
-
-    public User(String photo, String name) {
-        super();
-        this.photo = photo;
-        this.name = name;
-    }
+    private List<Float> ratings;
+    private List<Place> servicePlaces;
 
     public User() {
         super();
+        this.ratings = new ArrayList<>();
+        this.servicePlaces = new ArrayList<>();
+    }
+
+    public User(String name, String email, String password) {
+        this();
+        this.photo = null;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.worker = false;
     }
 
     public String getPhoto() {
@@ -77,11 +68,41 @@ public class User extends Bean {
         this.worker = worker;
     }
 
-    public float getRate() {
-        return rate;
+    public List<Float> getRatings() {
+        return ratings;
     }
 
-    public void setRate(float rate) {
-        this.rate = rate;
+    public void setRatings(List<Float> ratings) {
+        this.ratings = ratings;
+    }
+
+    public Float getRating() {
+        float rating = 0f;
+
+        if (!ratings.isEmpty()) {
+            for (Float rate : ratings) {
+                rating += rate;
+            }
+
+            return rating / ratings.size();
+        }
+
+        return rating;
+    }
+
+    public void addRating(Float rating) {
+        ratings.add(rating);
+    }
+
+    public List<Place> getServicePlaces() {
+        return servicePlaces;
+    }
+
+    public void setServicePlaces(List<Place> servicePlaces) {
+        this.servicePlaces = servicePlaces;
+    }
+
+    public void addServicePlace(Place place) {
+        servicePlaces.add(place);
     }
 }

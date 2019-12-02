@@ -54,9 +54,16 @@ public class WorkerListView extends GenericView {
     }
 
     public void updateWorkerList(List<User> users) {
+        if (users.isEmpty()) {
+            workerListRecyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            workerListRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
+
         workers.clear();
-        emptyView.setVisibility(View.GONE);
-        workerListRecyclerView.setVisibility(View.VISIBLE);
+
         for (User user : users) {
             workers.add(user);
         }
@@ -67,6 +74,11 @@ public class WorkerListView extends GenericView {
     }
 
     public void addWorkerToList(User worker) {
+        if (workerListRecyclerView.getVisibility() == View.GONE) {
+            workerListRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
+
         workers.add(worker);
 
         workerListAdapter.notifyDataSetChanged();

@@ -2,6 +2,7 @@ package br.com.ufc.quixada.housecleaning.view;
 
 import android.net.Uri;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,7 +11,11 @@ import android.widget.Spinner;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.ufc.quixada.housecleaning.R;
+import br.com.ufc.quixada.housecleaning.transactions.Place;
 import br.com.ufc.quixada.housecleaning.transactions.User;
 import br.com.ufc.quixada.housecleaning.view.eventlistener.UserProfileViewEventListener;
 
@@ -29,6 +34,10 @@ public class UserProfileView extends GenericView {
     private EditText passwordField;
 
     private Spinner workerSpinner;
+
+    private Button selectPlacesButton;
+
+    private List<Place> selectedPlaces;
 
     private Button saveButton;
 
@@ -68,6 +77,31 @@ public class UserProfileView extends GenericView {
 
         workerSpinner = rootView.findViewById(R.id.is_worker_field);
         workerSpinner.setAdapter(stringArrayAdapter);
+        workerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (isWorkerFieldOptions[position].equals("Sim")) {
+                    selectPlacesButton.setVisibility(View.VISIBLE);
+                } else {
+                    selectPlacesButton.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        selectPlacesButton = rootView.findViewById(R.id.select_places_button);
+        selectPlacesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userProfileViewEventListener.onClickSelectPlacesButton(selectedPlaces);
+            }
+        });
+
+        selectedPlaces = new ArrayList<>();
 
         saveButton = rootView.findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +111,7 @@ public class UserProfileView extends GenericView {
                 user.setName(nameField.getText().toString());
                 user.setEmail(emailField.getText().toString());
                 user.setPassword(passwordField.getText().toString());
+                user.setServicePlaces(selectedPlaces);
 
                 if (workerSpinner.getSelectedItem().equals("Sim")) {
                     user.setWorker(true);
@@ -108,6 +143,8 @@ public class UserProfileView extends GenericView {
         } else {
             workerSpinner.setSelection(0);
         }
+
+        selectedPlaces = user.getServicePlaces();
     }
 
     public void setNewUserPhoto(Uri uri) {
@@ -116,4 +153,7 @@ public class UserProfileView extends GenericView {
         Picasso.with(getRootView().getContext()).load(uri).into(photoImageView);
     }
 
+    public void setSelectedPlaces(List<Place> selectedPlaces) {
+        this.selectedPlaces = selectedPlaces;
+    }
 }

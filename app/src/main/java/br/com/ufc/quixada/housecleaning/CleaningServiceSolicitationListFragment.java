@@ -82,7 +82,7 @@ public class CleaningServiceSolicitationListFragment extends Fragment implements
         cleaningServiceDAO = CleaningServiceFirebaseDAO.getInstance(new CleaningServiceEventListener() {
             @Override
             public void onAdded(CleaningService cleaningService) {
-
+                cleaningServiceSolicitationListView.addCleaningServiceToList(cleaningService);
             }
 
             @Override
@@ -132,6 +132,8 @@ public class CleaningServiceSolicitationListFragment extends Fragment implements
     public void onClickAcceptSolicitation(CleaningService cleaningService) {
         cleaningService.setStatus(CleaningService.Status.ACCEPTED);
 
+        cleaningServiceDAO.update(cleaningService);
+
         updateCleaningServiceList();
     }
 
@@ -139,12 +141,16 @@ public class CleaningServiceSolicitationListFragment extends Fragment implements
     public void onClickRefuseSolicitation(CleaningService cleaningService) {
         cleaningService.setStatus(CleaningService.Status.REFUSED);
 
+        cleaningServiceDAO.update(cleaningService);
+
         updateCleaningServiceList();
     }
 
     @Override
     public void onClickFinalizeSolicitation(CleaningService cleaningService) {
         cleaningService.setStatus(CleaningService.Status.DONE);
+
+        cleaningServiceDAO.update(cleaningService);
 
         updateCleaningServiceList();
     }

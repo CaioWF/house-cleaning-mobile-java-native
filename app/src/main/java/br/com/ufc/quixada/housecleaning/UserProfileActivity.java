@@ -1,6 +1,7 @@
 package br.com.ufc.quixada.housecleaning;
 
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -11,12 +12,21 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import br.com.ufc.quixada.housecleaning.dao.PlaceDAO;
 import br.com.ufc.quixada.housecleaning.dao.UserDAO;
+import br.com.ufc.quixada.housecleaning.dao.firebase.PlaceFirebaseDAO;
 import br.com.ufc.quixada.housecleaning.dao.firebase.UserFirebaseDAO;
+import br.com.ufc.quixada.housecleaning.presenter.PlaceEventListener;
 import br.com.ufc.quixada.housecleaning.presenter.UserEventListener;
+import br.com.ufc.quixada.housecleaning.transactions.Place;
 import br.com.ufc.quixada.housecleaning.transactions.User;
 import br.com.ufc.quixada.housecleaning.util.SessionUtil;
 import br.com.ufc.quixada.housecleaning.util.StorageUtil;
@@ -27,6 +37,7 @@ public class UserProfileActivity extends AppCompatActivity implements UserProfil
 
     private static final int IMAGE_PICK_CODE = 1;
 
+    private PlaceDAO placeDAO;
     private UserDAO userDAO;
     private UserProfileView userProfileView;
 
@@ -42,6 +53,23 @@ public class UserProfileActivity extends AppCompatActivity implements UserProfil
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#62DBA8")));
 
         View rootView = getWindow().getDecorView().getRootView();
+
+        placeDAO = PlaceFirebaseDAO.getInstance(new PlaceEventListener() {
+            @Override
+            public void onAdded(Place place) {
+
+            }
+
+            @Override
+            public void onChanged(Place place) {
+
+            }
+
+            @Override
+            public void onRemoved(Place place) {
+
+            }
+        });
 
         userDAO = UserFirebaseDAO.getInstance(new UserEventListener() {
             @Override
@@ -90,6 +118,47 @@ public class UserProfileActivity extends AppCompatActivity implements UserProfil
     }
 
     @Override
+    public void onClickSelectPlacesButton(List<Place> userServicePlaces) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        final List<Place> places = placeDAO.findAll();
+
+        List<String> placeStringList = toStringList(places);
+        List<String> selectedPlaceStringList = toStringList(userServicePlaces);
+
+        String[] placeStrings = Arrays.copyOf(placeStringList.toArray(), placeStringList.size(), String[].class);
+
+        final boolean[] selectPlacePositions = getSelectedPositions(placeStringList, selectedPlaceStringList);
+
+        builder.setTitle("").setMultiChoiceItems(placeStrings, selectPlacePositions, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                selectPlacePositions[which] = isChecked;
+            }
+        }).setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                List<Place> selectedPlaces = new ArrayList<>();
+
+                for (int i = 0; i < selectPlacePositions.length; i++) {
+                    if (selectPlacePositions[i]) {
+                        selectedPlaces.add(places.get(i));
+                    }
+                }
+
+                userProfileView.setSelectedPlaces(selectedPlaces);
+
+                dialog.dismiss();
+            }
+        }).setNegativeButton(R.string.cancel_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
+    }
+
+    @Override
     public void onClickSave(User user, Uri userPhotoFileUri) {
         final User currentUser = getCurrentUser();
 
@@ -97,6 +166,7 @@ public class UserProfileActivity extends AppCompatActivity implements UserProfil
         currentUser.setEmail(user.getEmail());
         currentUser.setPassword(user.getPassword());
         currentUser.setWorker(user.isWorker());
+        currentUser.setServicePlaces(user.getServicePlaces());
 
         if (userPhotoFileUri != null) {
             String userPhotoFileName = System.currentTimeMillis() + "." + getFileExtension(userPhotoFileUri);
@@ -148,5 +218,29 @@ public class UserProfileActivity extends AppCompatActivity implements UserProfil
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
 
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
+    private <T extends Object> List<String> toStringList(List<T> objects) {
+        List<String> stringList = new ArrayList<>();
+
+        for (Object o : objects) {
+            stringList.add(o.toString());
+        }
+
+        return stringList;
+    }
+
+    private boolean[] getSelectedPositions(List<String> items, List<String> selectedItems) {
+        boolean[] selectedPositions = new boolean[items.size()];
+
+        for (int i = 0; i < items.size(); i++) {
+            if (selectedItems.contains(items.get(i))) {
+                selectedPositions[i] = true;
+            } else {
+                selectedPositions[i] = false;
+            }
+        }
+
+        return selectedPositions;
     }
 }
