@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,12 +17,22 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import br.com.ufc.quixada.housecleaning.adapter.WorkerListAdapter;
+import br.com.ufc.quixada.housecleaning.util.SessionUtil;
 
 public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener,
         WorkerListFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener, CleaningServiceSolicitationListFragment.OnFragmentInteractionListener {
 
     private BottomNavigationView bottomNavigationView;
     private Toolbar toolbar;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener authStateListener;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseAuth.addAuthStateListener(authStateListener);
+        SessionUtil.setCurrentUserId(HomeActivity.this, firebaseAuth.getCurrentUser().getUid());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +41,17 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 
         toolbar = findViewById(R.id.id_toolbar);
         setSupportActionBar(toolbar);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (firebaseAuth.getCurrentUser() == null) {
+                    startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                }
+            }
+        };
 
         bottomNavigationView = findViewById(R.id.id_bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -82,6 +104,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 
             case R.id.menu_logout:
                 Intent login = new Intent(getApplicationContext(), LoginActivity.class);
+                firebaseAuth.signOut();
                 startActivity(login);
                 finish();
 

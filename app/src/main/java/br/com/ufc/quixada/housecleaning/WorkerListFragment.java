@@ -2,21 +2,28 @@ package br.com.ufc.quixada.housecleaning;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import br.com.ufc.quixada.housecleaning.dao.UserDAO;
 import br.com.ufc.quixada.housecleaning.dao.firebase.UserFirebaseDAO;
 import br.com.ufc.quixada.housecleaning.presenter.UserEventListener;
+import br.com.ufc.quixada.housecleaning.transactions.Place;
 import br.com.ufc.quixada.housecleaning.transactions.User;
+import br.com.ufc.quixada.housecleaning.util.LocationUtil;
 import br.com.ufc.quixada.housecleaning.util.SessionUtil;
+import br.com.ufc.quixada.housecleaning.view.NearWorkerListView;
 import br.com.ufc.quixada.housecleaning.view.WorkerListView;
+import br.com.ufc.quixada.housecleaning.view.eventlistener.UpdateCurrentPlaceEventListener;
 import br.com.ufc.quixada.housecleaning.view.eventlistener.WorkerListViewEventListener;
 
 /**
@@ -27,11 +34,13 @@ import br.com.ufc.quixada.housecleaning.view.eventlistener.WorkerListViewEventLi
  * Use the {@link WorkerListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WorkerListFragment extends Fragment implements WorkerListViewEventListener {
+public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEventListener, WorkerListViewEventListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private static final int REQUEST_GPS_CODE = 5;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -40,7 +49,10 @@ public class WorkerListFragment extends Fragment implements WorkerListViewEventL
     private OnFragmentInteractionListener mListener;
 
     private UserDAO userDAO;
+    private NearWorkerListView nearWorkerListView;
     private WorkerListView workerListView;
+    private LocationUtil locationUtil;
+    private Place place;
 
     public WorkerListFragment() {
         // Required empty public constructor
@@ -96,27 +108,75 @@ public class WorkerListFragment extends Fragment implements WorkerListViewEventL
             }
         });
 
+        locationUtil = new LocationUtil(this);
+        place = new Place();
+        openGPS();
+
+        nearWorkerListView = new NearWorkerListView();
+        nearWorkerListView.initialize(view);
+
         workerListView = new WorkerListView(this);
         workerListView.initialize(view);
 
+        List<User> nearWorkers = getAllNearWorkersExceptCurrentUser(view.getContext());
+        nearWorkerListView.updateWorkerList(nearWorkers);
         List<User> workers = getAllWorkersExceptCurrentUser(view.getContext());
         workerListView.updateWorkerList(workers);
 
         return view;
     }
 
+    private List<User> getAllNearWorkersExceptCurrentUser(Context context) {
+        List<User> workers = userDAO.findAllWorkers();
+        List<User> toRemove = new ArrayList<>();
+        String currentUserId = SessionUtil.getCurrentUserId(context);
+        for (User worker : workers) {
+            if (worker.getId().equals(currentUserId) || !containsPLace(place, worker.getServicePlaces())) {
+                toRemove.add(worker);
+            }
+        }
+        workers.removeAll(toRemove);
+
+        return workers;
+    }
+
+    private boolean containsPLace(Place place1, List<Place> places) {
+        if (place1.getCity() == null && place1.getNeighborhood() == null) {
+            return false;
+        }
+        for (Place place : places) {
+            if (place.getCity().equals(place1.getCity())
+                    && place.getNeighborhood().equals(place1.getNeighborhood())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private List<User> getAllWorkersExceptCurrentUser(Context context) {
         List<User> workers = userDAO.findAllWorkers();
+        List<User> toRemove = new ArrayList<>();
 
         String currentUserId = SessionUtil.getCurrentUserId(context);
 
         for (User worker : workers) {
-            if (worker.getId().equals(currentUserId)) {
-                workers.remove(worker);
+            if (worker.getId().equals(currentUserId)
+                    || containsUser(worker, getAllNearWorkersExceptCurrentUser(getContext()))) {
+                toRemove.add(worker);
             }
         }
 
+        workers.removeAll(toRemove);
         return workers;
+    }
+
+    private boolean containsUser(User worker, List<User> nearWorkers) {
+        for (User user : nearWorkers) {
+            if (user.getId().equals(worker.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -144,6 +204,16 @@ public class WorkerListFragment extends Fragment implements WorkerListViewEventL
     }
 
     @Override
+    public void updatePlace(Place place) {
+        this.place = place;
+
+        List<User> near = getAllNearWorkersExceptCurrentUser(getContext());
+        List<User> others = getAllWorkersExceptCurrentUser(getContext());
+
+        nearWorkerListView.updateWorkerList(near);
+        workerListView.updateWorkerList(others);
+    }
+
     public void onClickHireButton(User worker) {
         Intent intent = new Intent(getContext(), RequestCleaningServiceActivity.class);
         intent.putExtra("user_id", worker.getId());
@@ -178,4 +248,25 @@ public class WorkerListFragment extends Fragment implements WorkerListViewEventL
         return workerListView;
     }
 
+    public void openGPS() {
+        if (!locationUtil.checkGPSPermission(getActivity())) {
+            locationUtil.requestGPSPermission(getActivity());
+        } else {
+            useLocation();
+        }
+    }
+
+    private void useLocation() {
+        locationUtil.useLocation(getActivity());
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_GPS_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                useLocation();
+            }
+        }
+    }
 }

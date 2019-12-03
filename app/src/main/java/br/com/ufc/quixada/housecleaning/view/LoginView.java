@@ -3,6 +3,7 @@ package br.com.ufc.quixada.housecleaning.view;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import br.com.ufc.quixada.housecleaning.R;
 import br.com.ufc.quixada.housecleaning.view.eventlistener.LoginViewEventListener;
@@ -14,6 +15,8 @@ public class LoginView extends GenericView {
     private EditText passwordField;
 
     private Button loginButton;
+
+    private Button signInWithGoogle;
 
     private Button goToRegistrationButton;
 
@@ -39,6 +42,14 @@ public class LoginView extends GenericView {
                 String password = passwordField.getText().toString();
 
                 loginViewEventListener.onClickLoginButton(email, password);
+            }
+        });
+
+        signInWithGoogle = rootView.findViewById(R.id.id_btn_google);
+        signInWithGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loginViewEventListener.onClickSignInWithGoogle();
             }
         });
 
