@@ -5,9 +5,12 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.IOException;
@@ -26,6 +29,10 @@ public class LocationUtil {
 
     public LocationUtil(UpdateCurrentPlaceEventListener updateCurrentPlaceEventListener) {
         this.updateCurrentPlaceEventListener = updateCurrentPlaceEventListener;
+    }
+
+    public LocationUtil() {
+
     }
 
     public boolean checkGPSPermission(Activity activity) {
@@ -67,6 +74,19 @@ public class LocationUtil {
                 }
             }
         });
+    }
+
+    public LatLng getLatLngFromCityAndNeighborhood(Activity activity, String city, String neighborhood) {
+        geocoder = new Geocoder(activity, Locale.getDefault());
+        List<Address> addresses;
+        LatLng latLng = null;
+        try {
+            addresses = geocoder.getFromLocationName(city+", "+neighborhood, 1);
+            latLng = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return latLng;
     }
 
 }

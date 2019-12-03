@@ -6,4 +6,5 @@ public interface LoginViewEventListener {
 
     void onClickGoToRegistrationButton();
 
+    void onClickSignInWithGoogle();
 }

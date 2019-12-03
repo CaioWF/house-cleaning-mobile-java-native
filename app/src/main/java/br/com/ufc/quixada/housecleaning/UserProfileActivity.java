@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -122,8 +123,8 @@ public class UserProfileActivity extends AppCompatActivity implements UserProfil
 
     private User getCurrentUser() {
         String currentUserId = SessionUtil.getCurrentUserId(this);
-
-        return userDAO.findById(currentUserId);
+        User user = userDAO.findById(currentUserId);
+        return user;
     }
 
     @Override

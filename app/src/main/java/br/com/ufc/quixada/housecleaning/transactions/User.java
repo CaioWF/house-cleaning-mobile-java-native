@@ -28,6 +28,17 @@ public class User extends Bean {
         this.worker = false;
     }
 
+    public User(String id, String name, String email, String password) {
+        super(id);
+        this.photo = null;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.worker = false;
+        this.ratings = new ArrayList<>();
+        this.servicePlaces = new ArrayList<>();
+    }
+
     public String getPhoto() {
         return photo;
     }

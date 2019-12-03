@@ -1,11 +1,16 @@
 package br.com.ufc.quixada.housecleaning;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
@@ -14,6 +19,8 @@ import br.com.ufc.quixada.housecleaning.dao.CleaningServiceDAO;
 import br.com.ufc.quixada.housecleaning.dao.firebase.CleaningServiceFirebaseDAO;
 import br.com.ufc.quixada.housecleaning.presenter.CleaningServiceEventListener;
 import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
+import br.com.ufc.quixada.housecleaning.transactions.Place;
+import br.com.ufc.quixada.housecleaning.util.LocationUtil;
 import br.com.ufc.quixada.housecleaning.util.SessionUtil;
 import br.com.ufc.quixada.housecleaning.view.CleaningServiceSolicitationListView;
 import br.com.ufc.quixada.housecleaning.view.eventlistener.CleaningServiceSolicitationListViewEventListener;
@@ -82,7 +89,7 @@ public class CleaningServiceSolicitationListFragment extends Fragment implements
         cleaningServiceDAO = CleaningServiceFirebaseDAO.getInstance(new CleaningServiceEventListener() {
             @Override
             public void onAdded(CleaningService cleaningService) {
-
+                cleaningServiceSolicitationListView.addCleaningServiceToList(cleaningService);
             }
 
             @Override
@@ -132,12 +139,16 @@ public class CleaningServiceSolicitationListFragment extends Fragment implements
     public void onClickAcceptSolicitation(CleaningService cleaningService) {
         cleaningService.setStatus(CleaningService.Status.ACCEPTED);
 
+        cleaningServiceDAO.update(cleaningService);
+
         updateCleaningServiceList();
     }
 
     @Override
     public void onClickRefuseSolicitation(CleaningService cleaningService) {
         cleaningService.setStatus(CleaningService.Status.REFUSED);
+
+        cleaningServiceDAO.update(cleaningService);
 
         updateCleaningServiceList();
     }
@@ -146,7 +157,24 @@ public class CleaningServiceSolicitationListFragment extends Fragment implements
     public void onClickFinalizeSolicitation(CleaningService cleaningService) {
         cleaningService.setStatus(CleaningService.Status.DONE);
 
+        cleaningServiceDAO.update(cleaningService);
+
         updateCleaningServiceList();
+    }
+
+    @Override
+    public void onClickSeeOnMapSolicitation(CleaningService cleaningService) {
+        LocationUtil locationUtil = new LocationUtil();
+        Place place = cleaningService.getAddress().getPlace();
+        LatLng latLng = locationUtil.getLatLngFromCityAndNeighborhood(getActivity(), place.getCity(), place.getNeighborhood());
+        if (latLng == null) {
+            Toast.makeText(getActivity(), "Não foi possível ver a localização no mapa.", Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = new Intent(getActivity(), MapsActivity.class);
+            intent.putExtra("lat", latLng.latitude);
+            intent.putExtra("lng", latLng.longitude);
+            startActivity(intent);
+        }
     }
 
     private void updateCleaningServiceList() {

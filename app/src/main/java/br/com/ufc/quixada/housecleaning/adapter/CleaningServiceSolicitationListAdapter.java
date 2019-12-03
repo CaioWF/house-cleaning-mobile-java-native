@@ -28,6 +28,7 @@ public class CleaningServiceSolicitationListAdapter extends RecyclerView.Adapter
         public Button acceptSolicitationButton;
         public Button refuseSolicitationButton;
         public Button finalizeSolicitationButton;
+        public Button seeLocationOnMapButton;
 
         public CleaningServiceSolicitationListViewHolder(View view) {
             super(view);
@@ -38,6 +39,7 @@ public class CleaningServiceSolicitationListAdapter extends RecyclerView.Adapter
             acceptSolicitationButton = view.findViewById(R.id.accept_solicitation_button);
             refuseSolicitationButton = view.findViewById(R.id.refuse_solicitation_button);
             finalizeSolicitationButton = view.findViewById(R.id.finalize_solicitation_button);
+            seeLocationOnMapButton = view.findViewById(R.id.see_location_on_map_button);
         }
     }
 
@@ -100,6 +102,13 @@ public class CleaningServiceSolicitationListAdapter extends RecyclerView.Adapter
             @Override
             public void onClick(View v) {
                 cleaningServiceSolicitationListViewEventListener.onClickFinalizeSolicitation(cleaningService);
+            }
+        });
+
+        holder.seeLocationOnMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cleaningServiceSolicitationListViewEventListener.onClickSeeOnMapSolicitation(cleaningService);
             }
         });
     }

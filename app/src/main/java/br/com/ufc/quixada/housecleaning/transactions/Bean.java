@@ -10,6 +10,10 @@ public abstract class Bean {
         id = UUID.randomUUID().toString();
     }
 
+    public Bean(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }

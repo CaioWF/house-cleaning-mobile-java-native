@@ -10,4 +10,6 @@ public interface CleaningServiceSolicitationListViewEventListener {
 
     void onClickFinalizeSolicitation(CleaningService cleaningService);
 
+    void onClickSeeOnMapSolicitation(CleaningService cleaningService);
+
 }

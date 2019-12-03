@@ -61,4 +61,6 @@
     </string-array>
     <string name="near_workers">Atendem na sua localização atual</string>
     <string name="others_workers">Atendem nas demais localidades</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="maps_page">Localização do serviço</string>
 </resources>

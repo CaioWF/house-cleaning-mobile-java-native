@@ -75,6 +75,11 @@ public class CleaningServiceSolicitationListView extends GenericView {
     }
 
     public void addCleaningServiceToList(CleaningService cleaningService) {
+        if (cleaningServiceSolicitationListRecyclerView.getVisibility() == View.GONE) {
+            cleaningServiceSolicitationListRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
+
         this.cleaningServices.add(cleaningService);
 
         cleaningServiceSolicitationListAdapter.notifyDataSetChanged();
