@@ -88,6 +88,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <Button
+            android:id="@+id/select_places_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/user_profile_select_places" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -56,18 +56,23 @@ public abstract class GenericFirebaseDAO<T extends Bean> implements GenericDAO<T
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 T t = dataSnapshot.getValue(thisPersistenceClass);
+
+                tList.add(t);
+
                 thisEventListener.onAdded(t);
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 T t = dataSnapshot.getValue(thisPersistenceClass);
+
                 thisEventListener.onChanged(t);
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 T t = dataSnapshot.getValue(thisPersistenceClass);
+
                 thisEventListener.onRemoved(t);
             }
 

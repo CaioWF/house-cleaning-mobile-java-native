@@ -18,6 +18,6 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:visibility="gone"
-        android:text="Sem dados" />
+        android:text="@string/message_history_empty" />
 
 </FrameLayout>

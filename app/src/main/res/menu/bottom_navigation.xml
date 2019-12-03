@@ -3,17 +3,17 @@
 
     <item
         android:id="@+id/id_bottom_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="Página Inicial"/>
+        android:icon="@drawable/ic_history_black_24dp"
+        android:title="@string/bottom_navigation_tab1"/>
 
     <item
         android:id="@+id/id_bottom_workers"
         android:icon="@drawable/ic_wiping_swipe_for_floors"
-        android:title="Solicitar Serviço"/>
+        android:title="@string/bottom_navigation_tab2"/>
 
     <item
         android:id="@+id/id_bottom_requestes"
         android:icon="@drawable/ic_question_answer_black_24dp"
-        android:title="Solicitações"/>
+        android:title="@string/bottom_navigation_tab3"/>
 
 </menu>

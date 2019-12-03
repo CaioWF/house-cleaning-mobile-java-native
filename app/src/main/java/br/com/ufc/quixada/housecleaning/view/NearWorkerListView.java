@@ -13,7 +13,7 @@ import br.com.ufc.quixada.housecleaning.R;
 import br.com.ufc.quixada.housecleaning.adapter.WorkerListAdapter;
 import br.com.ufc.quixada.housecleaning.transactions.User;
 
-public class WorkerListView extends GenericView {
+public class NearWorkerListView extends GenericView {
 
     private RecyclerView workerListRecyclerView;
     private RecyclerView.Adapter workerListAdapter;
@@ -22,7 +22,7 @@ public class WorkerListView extends GenericView {
 
     private List<User> workers;
 
-    public WorkerListView() {
+    public NearWorkerListView() {
         workers = new ArrayList<>();
     }
 
@@ -30,8 +30,8 @@ public class WorkerListView extends GenericView {
     public void initialize(View rootView) {
         super.initialize(rootView);
 
-        workerListRecyclerView = rootView.findViewById(R.id.worker_list_recycler_view);
-        emptyView = rootView.findViewById(R.id.empty_view);
+        workerListRecyclerView = rootView.findViewById(R.id.near_worker_list_recycler_view);
+        emptyView = rootView.findViewById(R.id.empty_view_near);
         workerListRecyclerView.setHasFixedSize(true);
 
         workerListLayoutManager = new LinearLayoutManager(rootView.getContext());
@@ -40,6 +40,13 @@ public class WorkerListView extends GenericView {
         workerListAdapter = new WorkerListAdapter(workers);
         workerListRecyclerView.setAdapter(workerListAdapter);
 
+        if (workers.isEmpty()) {
+            workerListRecyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            workerListRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -63,12 +70,12 @@ public class WorkerListView extends GenericView {
             workerListRecyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
         }
-
         workerListAdapter.notifyDataSetChanged();
     }
 
     public void addWorkerToList(User worker) {
         workers.add(worker);
+
         if (workers.isEmpty()) {
             workerListRecyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
@@ -76,6 +83,7 @@ public class WorkerListView extends GenericView {
             workerListRecyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
         }
+
         workerListAdapter.notifyDataSetChanged();
     }
 

@@ -38,6 +38,13 @@ public class CleaningServicesListView extends GenericView {
 
         cleaningServiceListAdapter = new CleaningServiceListAdapter(cleaningServices);
         cleaningServiceListRecyclerView.setAdapter(cleaningServiceListAdapter);
+        if (cleaningServices.isEmpty()) {
+            cleaningServiceListRecyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            cleaningServiceListRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
     }
 
     @Override

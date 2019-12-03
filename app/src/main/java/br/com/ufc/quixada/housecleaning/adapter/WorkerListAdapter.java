@@ -71,7 +71,7 @@ public class WorkerListAdapter extends RecyclerView.Adapter<WorkerListAdapter.Wo
         }
 
         holder.workerName.setText(worker.getName());
-        holder.workerRate.setText(worker.getRate() + " ★");
+        holder.workerRate.setText(worker.getRating() + " ★");
 
         holder.hireButton.setOnClickListener(new View.OnClickListener() {
             @Override
