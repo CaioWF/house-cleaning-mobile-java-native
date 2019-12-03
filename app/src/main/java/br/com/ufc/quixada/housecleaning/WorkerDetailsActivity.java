@@ -3,6 +3,7 @@ package br.com.ufc.quixada.housecleaning;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
@@ -56,6 +57,19 @@ public class WorkerDetailsActivity extends AppCompatActivity {
         User worker = userDAO.findById(workerId);
 
         workerDetailsView.loadWorkerProfile(worker);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }
