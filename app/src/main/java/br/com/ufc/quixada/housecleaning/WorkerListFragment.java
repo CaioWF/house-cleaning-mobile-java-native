@@ -1,6 +1,7 @@
 package br.com.ufc.quixada.housecleaning;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import br.com.ufc.quixada.housecleaning.presenter.UserEventListener;
 import br.com.ufc.quixada.housecleaning.transactions.User;
 import br.com.ufc.quixada.housecleaning.util.SessionUtil;
 import br.com.ufc.quixada.housecleaning.view.WorkerListView;
+import br.com.ufc.quixada.housecleaning.view.eventlistener.WorkerListViewEventListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,7 +27,7 @@ import br.com.ufc.quixada.housecleaning.view.WorkerListView;
  * Use the {@link WorkerListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WorkerListFragment extends Fragment {
+public class WorkerListFragment extends Fragment implements WorkerListViewEventListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -94,7 +96,7 @@ public class WorkerListFragment extends Fragment {
             }
         });
 
-        workerListView = new WorkerListView();
+        workerListView = new WorkerListView(this);
         workerListView.initialize(view);
 
         List<User> workers = getAllWorkersExceptCurrentUser(view.getContext());
@@ -139,6 +141,22 @@ public class WorkerListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClickHireButton(User worker) {
+        Intent intent = new Intent(getContext(), RequestCleaningServiceActivity.class);
+        intent.putExtra("user_id", worker.getId());
+
+        startActivity(intent);
+    }
+
+    @Override
+    public void onClickViewDetailsButton(User worker) {
+        Intent intent = new Intent(getContext(), WorkerDetailsActivity.class);
+        intent.putExtra("user_id", worker.getId());
+
+        startActivity(intent);
     }
 
     /**

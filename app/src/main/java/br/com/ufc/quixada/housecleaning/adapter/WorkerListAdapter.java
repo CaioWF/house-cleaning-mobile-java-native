@@ -21,10 +21,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import br.com.ufc.quixada.housecleaning.R;
 import br.com.ufc.quixada.housecleaning.RequestCleaningServiceActivity;
 import br.com.ufc.quixada.housecleaning.transactions.User;
+import br.com.ufc.quixada.housecleaning.view.eventlistener.WorkerListViewEventListener;
 
 public class WorkerListAdapter extends RecyclerView.Adapter<WorkerListAdapter.WorkerListViewHolder> implements Filterable {
 
     private List<User> workers;
+
+    private WorkerListViewEventListener workerListViewEventListener;
+
     private List<User> workersFull;
 
     public static class WorkerListViewHolder extends RecyclerView.ViewHolder {
@@ -33,6 +37,7 @@ public class WorkerListAdapter extends RecyclerView.Adapter<WorkerListAdapter.Wo
         public TextView workerRate;
         public ImageView workerPhoto;
         public Button hireButton;
+        public Button viewDetailsButton;
 
         public WorkerListViewHolder(View view) {
             super(view);
@@ -41,11 +46,13 @@ public class WorkerListAdapter extends RecyclerView.Adapter<WorkerListAdapter.Wo
             workerRate = view.findViewById(R.id.worker_rate_text_view);
             workerPhoto = view.findViewById(R.id.worker_photo_image_view);
             hireButton = view.findViewById(R.id.hire_button);
+            viewDetailsButton = view.findViewById(R.id.view_details_button);
         }
     }
 
-    public WorkerListAdapter(List<User> workers) {
+    public WorkerListAdapter(List<User> workers, WorkerListViewEventListener workerListViewEventListener) {
         this.workers = workers;
+        this.workerListViewEventListener = workerListViewEventListener;
         this.workersFull = new ArrayList<>(workers);
     }
 
@@ -76,10 +83,14 @@ public class WorkerListAdapter extends RecyclerView.Adapter<WorkerListAdapter.Wo
         holder.hireButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), RequestCleaningServiceActivity.class);
-                intent.putExtra("user_id", worker.getId());
+                workerListViewEventListener.onClickHireButton(worker);
+            }
+        });
 
-                v.getContext().startActivity(intent);
+        holder.viewDetailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                workerListViewEventListener.onClickViewDetailsButton(worker);
             }
         });
     }
