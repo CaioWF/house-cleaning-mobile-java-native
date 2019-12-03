@@ -11,13 +11,13 @@
         android:id="@+id/cleaning_service_solicitation_list_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical" />
 
     <TextView
         android:id="@+id/empty_view3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:visibility="gone"
-        android:text="@string/message_solicitations_empty" />
+        android:text="@string/message_solicitations_empty"
+        android:visibility="gone" />
 </FrameLayout>

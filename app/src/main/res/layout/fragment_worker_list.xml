@@ -15,7 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -26,11 +26,11 @@
                     android:id="@+id/textView9"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
                     android:layout_marginTop="5dp"
+                    android:background="@color/light_gray"
+                    android:paddingLeft="10dp"
                     android:text="@string/near_workers"
                     android:textColor="@color/black"
-                    android:background="@color/light_gray"
                     android:textSize="16dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -58,17 +58,17 @@
                     android:id="@+id/textView10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/light_gray"
                     android:paddingLeft="10dp"
                     android:text="@string/others_workers"
                     android:textColor="@color/black"
-                    android:background="@color/light_gray"
                     android:textSize="16dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/worker_list_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scrollbars="vertical"/>
+                    android:scrollbars="vertical" />
 
                 <TextView
                     android:id="@+id/empty_view"
@@ -82,6 +82,4 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-
 </FrameLayout>

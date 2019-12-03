@@ -43,6 +43,7 @@
     <string name="cleaning_service_datetime_field">Data e Horário</string>
     <string name="cleaning_service_number_of_rooms_field">Número de Cômodos</string>
     <string name="cleaning_service_additional_comments_field">Comentários Adicionais</string>
+    <string name="rate_service_label">Avaliar Este Serviço</string>
     <string name="text_about">Produto desenvolvido para a disciplina de Desenvolvimento de Software para Dispositivos Móveis</string>
     <string name="github_link">
         <a href="https://github.com/CaioWF/house-cleaning-mobile-java-native">https://github.com/CaioWF/house-cleaning-mobile-java-native</a>

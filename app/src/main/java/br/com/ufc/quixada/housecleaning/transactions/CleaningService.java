@@ -93,7 +93,7 @@ public class CleaningService extends Bean {
     }
 
     public enum Status {
-        PENDENT(0), ACCEPTED(1), REFUSED(2), DONE(3);
+        PENDENT(0), ACCEPTED(1), REFUSED(2), DONE(3), RATED(4);
 
         private int value;
 
@@ -108,16 +108,19 @@ public class CleaningService extends Bean {
         @Override
         public String toString() {
             if (value == 0)
-                return "PENDENT";
+                return "Pendente";
 
             if (value == 1)
-                return "ACCEPTED";
+                return "Aceito";
 
             if (value == 2)
-                return "REFUSED";
+                return "Recusado";
 
             if (value == 3)
-                return "DONE";
+                return "Finalizado";
+
+            if (value == 4)
+                return "Avaliado";
 
             return "";
         }

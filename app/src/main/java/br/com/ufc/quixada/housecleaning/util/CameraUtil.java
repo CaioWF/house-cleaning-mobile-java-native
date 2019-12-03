@@ -15,14 +15,14 @@ import androidx.core.app.ActivityCompat;
 
 public class CameraUtil {
     public boolean checkCameraPermission(Activity activity) {
-        if(ActivityCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             return false;
         }
         return true;
     }
 
     public void requestCameraPermission(Activity activity) {
-        if(ActivityCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, 2);
         }
     }

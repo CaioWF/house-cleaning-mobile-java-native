@@ -66,7 +66,7 @@ public class CleaningServiceSolicitationListAdapter extends RecyclerView.Adapter
         holder.cleaningServiceStatus.setText(cleaningService.getStatus().toString());
         holder.cleaningServicePrice.setText("R$ " + cleaningService.getPrice());
 
-        if (cleaningService.getStatus() == CleaningService.Status.REFUSED || cleaningService.getStatus() == CleaningService.Status.DONE) {
+        if (cleaningService.getStatus() == CleaningService.Status.REFUSED || cleaningService.getStatus() == CleaningService.Status.DONE || cleaningService.getStatus() == CleaningService.Status.RATED) {
             holder.acceptSolicitationButton.setVisibility(View.GONE);
             holder.refuseSolicitationButton.setVisibility(View.GONE);
             holder.finalizeSolicitationButton.setVisibility(View.GONE);

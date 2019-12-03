@@ -11,8 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import br.com.ufc.quixada.housecleaning.R;
 import br.com.ufc.quixada.housecleaning.adapter.CleaningServiceListAdapter;
 import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
+import br.com.ufc.quixada.housecleaning.view.eventlistener.HistoryViewEventListener;
 
-public class CleaningServicesListView extends GenericView {
+public class HistoryView extends GenericView {
 
     private RecyclerView cleaningServiceListRecyclerView;
     private RecyclerView.Adapter cleaningServiceListAdapter;
@@ -20,9 +21,11 @@ public class CleaningServicesListView extends GenericView {
     private TextView emptyView;
 
     private List<CleaningService> cleaningServices;
+    private HistoryViewEventListener historyViewEventListener;
 
-    public CleaningServicesListView() {
-        cleaningServices = new ArrayList<>();
+    public HistoryView(HistoryViewEventListener historyViewEventListener) {
+        this.cleaningServices = new ArrayList<>();
+        this.historyViewEventListener = historyViewEventListener;
     }
 
     @Override
@@ -36,7 +39,7 @@ public class CleaningServicesListView extends GenericView {
         cleaningServiceListLayoutManager = new LinearLayoutManager(rootView.getContext());
         cleaningServiceListRecyclerView.setLayoutManager(cleaningServiceListLayoutManager);
 
-        cleaningServiceListAdapter = new CleaningServiceListAdapter(cleaningServices);
+        cleaningServiceListAdapter = new CleaningServiceListAdapter(cleaningServices, historyViewEventListener);
         cleaningServiceListRecyclerView.setAdapter(cleaningServiceListAdapter);
         if (cleaningServices.isEmpty()) {
             cleaningServiceListRecyclerView.setVisibility(View.GONE);
@@ -53,14 +56,29 @@ public class CleaningServicesListView extends GenericView {
     }
 
     public void addCleaningServiceToList(CleaningService cleaningService) {
+        if (cleaningServiceListRecyclerView.getVisibility() == View.GONE) {
+            cleaningServiceListRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
+
         cleaningServices.add(cleaningService);
 
+        cleaningServiceListAdapter.notifyDataSetChanged();
+    }
+
+    public void updateCleaningServiceList(List<CleaningService> cleaningServices) {
         if (cleaningServices.isEmpty()) {
             cleaningServiceListRecyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
         } else {
             cleaningServiceListRecyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
+        }
+
+        this.cleaningServices.clear();
+
+        for (CleaningService cleaningService : cleaningServices) {
+            this.cleaningServices.add(cleaningService);
         }
 
         cleaningServiceListAdapter.notifyDataSetChanged();

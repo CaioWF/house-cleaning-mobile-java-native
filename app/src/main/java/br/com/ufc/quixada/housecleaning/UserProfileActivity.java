@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -298,16 +297,16 @@ public class UserProfileActivity extends AppCompatActivity implements UserProfil
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQUEST_CAMERA_CODE){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if(!externalStorageUtil.checkExternalStoragePermission(this)) {
+        if (requestCode == REQUEST_CAMERA_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (!externalStorageUtil.checkExternalStoragePermission(this)) {
                     externalStorageUtil.requestExternalStoragePermission(this);
                 } else {
                     cameraUtil.takeAPicture(this);
                 }
             }
         } else if (requestCode == REQUEST_WRITE_EXTERNAL_STORAGE_CODE) {
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 cameraUtil.takeAPicture(this);
             }
         }

@@ -1,6 +1,5 @@
 package br.com.ufc.quixada.housecleaning.view;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -12,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import br.com.ufc.quixada.housecleaning.R;
 import br.com.ufc.quixada.housecleaning.adapter.WorkerListAdapter;
 import br.com.ufc.quixada.housecleaning.transactions.User;
+import br.com.ufc.quixada.housecleaning.view.eventlistener.WorkerListViewEventListener;
 
 public class WorkerListView extends GenericView {
 
@@ -22,8 +22,11 @@ public class WorkerListView extends GenericView {
 
     private List<User> workers;
 
-    public WorkerListView() {
-        workers = new ArrayList<>();
+    private WorkerListViewEventListener workerListViewEventListener;
+
+    public WorkerListView(WorkerListViewEventListener workerListViewEventListener) {
+        this.workers = new ArrayList<>();
+        this.workerListViewEventListener = workerListViewEventListener;
     }
 
     @Override
@@ -37,7 +40,7 @@ public class WorkerListView extends GenericView {
         workerListLayoutManager = new LinearLayoutManager(rootView.getContext());
         workerListRecyclerView.setLayoutManager(workerListLayoutManager);
 
-        workerListAdapter = new WorkerListAdapter(workers);
+        workerListAdapter = new WorkerListAdapter(workers, workerListViewEventListener);
         workerListRecyclerView.setAdapter(workerListAdapter);
 
     }
@@ -48,15 +51,7 @@ public class WorkerListView extends GenericView {
     }
 
     public void updateWorkerList(List<User> users) {
-        workers.clear();
-        workerListRecyclerView.setVisibility(View.VISIBLE);
-        for (User user : users) {
-            workers.add(user);
-        }
-
-        ((WorkerListAdapter) workerListAdapter).updateWorkersFull();
-
-        if (workers.isEmpty()) {
+        if (users.isEmpty()) {
             workerListRecyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
         } else {
@@ -64,10 +59,23 @@ public class WorkerListView extends GenericView {
             emptyView.setVisibility(View.GONE);
         }
 
+        workers.clear();
+
+        for (User user : users) {
+            workers.add(user);
+        }
+
+        ((WorkerListAdapter) workerListAdapter).updateWorkersFull();
+
         workerListAdapter.notifyDataSetChanged();
     }
 
     public void addWorkerToList(User worker) {
+        if (workerListRecyclerView.getVisibility() == View.GONE) {
+            workerListRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
+
         workers.add(worker);
         if (workers.isEmpty()) {
             workerListRecyclerView.setVisibility(View.GONE);

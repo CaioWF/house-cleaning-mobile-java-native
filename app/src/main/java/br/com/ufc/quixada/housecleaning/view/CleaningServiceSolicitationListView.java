@@ -24,7 +24,7 @@ public class CleaningServiceSolicitationListView extends GenericView {
     private CleaningServiceSolicitationListViewEventListener cleaningServiceSolicitationListViewEventListener;
 
     public CleaningServiceSolicitationListView(CleaningServiceSolicitationListViewEventListener cleaningServiceSolicitationListViewEventListener) {
-        cleaningServices = new ArrayList<>();
+        this.cleaningServices = new ArrayList<>();
         this.cleaningServiceSolicitationListViewEventListener = cleaningServiceSolicitationListViewEventListener;
     }
 
@@ -33,7 +33,7 @@ public class CleaningServiceSolicitationListView extends GenericView {
         super.initialize(rootView);
 
         cleaningServiceSolicitationListRecyclerView = rootView.findViewById(R.id.cleaning_service_solicitation_list_recycler_view);
-        emptyView = (TextView) rootView.findViewById(R.id.empty_view3);
+        emptyView = rootView.findViewById(R.id.empty_view3);
         cleaningServiceSolicitationListRecyclerView.setHasFixedSize(true);
 
         cleaningServiceSolicitationListLayoutManager = new LinearLayoutManager(rootView.getContext());
@@ -41,14 +41,6 @@ public class CleaningServiceSolicitationListView extends GenericView {
 
         cleaningServiceSolicitationListAdapter = new CleaningServiceSolicitationListAdapter(cleaningServices, cleaningServiceSolicitationListViewEventListener);
         cleaningServiceSolicitationListRecyclerView.setAdapter(cleaningServiceSolicitationListAdapter);
-
-        if (cleaningServices.isEmpty()) {
-            cleaningServiceSolicitationListRecyclerView.setVisibility(View.GONE);
-            emptyView.setVisibility(View.VISIBLE);
-        } else {
-            cleaningServiceSolicitationListRecyclerView.setVisibility(View.VISIBLE);
-            emptyView.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -57,8 +49,6 @@ public class CleaningServiceSolicitationListView extends GenericView {
     }
 
     public void updateCleaningServiceList(List<CleaningService> cleaningServices) {
-        this.cleaningServices.clear();
-
         if (cleaningServices.isEmpty()) {
             cleaningServiceSolicitationListRecyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
@@ -66,6 +56,8 @@ public class CleaningServiceSolicitationListView extends GenericView {
             cleaningServiceSolicitationListRecyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
         }
+
+        this.cleaningServices.clear();
 
         for (CleaningService cleaningService : cleaningServices) {
             this.cleaningServices.add(cleaningService);

@@ -36,14 +36,14 @@ public class LocationUtil {
     }
 
     public boolean checkGPSPermission(Activity activity) {
-        if(ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return false;
         }
         return true;
     }
 
     public void requestGPSPermission(Activity activity) {
-        if(ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
         }
     }
@@ -81,7 +81,7 @@ public class LocationUtil {
         List<Address> addresses;
         LatLng latLng = null;
         try {
-            addresses = geocoder.getFromLocationName(city+", "+neighborhood, 1);
+            addresses = geocoder.getFromLocationName(city + ", " + neighborhood, 1);
             latLng = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
         } catch (IOException e) {
             e.printStackTrace();

@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity implements LoginViewEventLi
     @Override
     protected void onStart() {
         super.onStart();
-        if (firebaseAuth.getCurrentUser() != null){
+        if (firebaseAuth.getCurrentUser() != null) {
             SessionUtil.setCurrentUserId(LoginActivity.this, firebaseAuth.getCurrentUser().getUid());
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);

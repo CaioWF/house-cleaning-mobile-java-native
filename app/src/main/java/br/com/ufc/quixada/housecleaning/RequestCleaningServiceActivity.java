@@ -100,7 +100,9 @@ public class RequestCleaningServiceActivity extends AppCompatActivity implements
         requestCleaningServiceView = new RequestCleaningServiceView(this);
         requestCleaningServiceView.initialize(rootView);
 
-        List<Place> places = placeDAO.findAll();
+        String responsibleId = getIntent().getExtras().getString("user_id");
+        User responsible = userDAO.findById(responsibleId);
+        List<Place> places = responsible.getServicePlaces();
         requestCleaningServiceView.listAllPlaces(places);
     }
 

@@ -1,17 +1,15 @@
 package br.com.ufc.quixada.housecleaning;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -26,6 +24,7 @@ import br.com.ufc.quixada.housecleaning.util.SessionUtil;
 import br.com.ufc.quixada.housecleaning.view.NearWorkerListView;
 import br.com.ufc.quixada.housecleaning.view.WorkerListView;
 import br.com.ufc.quixada.housecleaning.view.eventlistener.UpdateCurrentPlaceEventListener;
+import br.com.ufc.quixada.housecleaning.view.eventlistener.WorkerListViewEventListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,7 +34,7 @@ import br.com.ufc.quixada.housecleaning.view.eventlistener.UpdateCurrentPlaceEve
  * Use the {@link WorkerListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEventListener {
+public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEventListener, WorkerListViewEventListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -114,8 +113,9 @@ public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEv
         openGPS();
 
         nearWorkerListView = new NearWorkerListView();
-        workerListView = new WorkerListView();
         nearWorkerListView.initialize(view);
+
+        workerListView = new WorkerListView(this);
         workerListView.initialize(view);
 
         List<User> nearWorkers = getAllNearWorkersExceptCurrentUser(view.getContext());
@@ -144,9 +144,9 @@ public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEv
         if (place1.getCity() == null && place1.getNeighborhood() == null) {
             return false;
         }
-        for (Place place: places){
+        for (Place place : places) {
             if (place.getCity().equals(place1.getCity())
-                    && place.getNeighborhood().equals(place1.getNeighborhood())){
+                    && place.getNeighborhood().equals(place1.getNeighborhood())) {
                 return true;
             }
         }
@@ -171,8 +171,8 @@ public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEv
     }
 
     private boolean containsUser(User worker, List<User> nearWorkers) {
-        for(User user: nearWorkers) {
-            if(user.getId().equals(worker.getId())) {
+        for (User user : nearWorkers) {
+            if (user.getId().equals(worker.getId())) {
                 return true;
             }
         }
@@ -206,12 +206,27 @@ public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEv
     @Override
     public void updatePlace(Place place) {
         this.place = place;
+
         List<User> near = getAllNearWorkersExceptCurrentUser(getContext());
         List<User> others = getAllWorkersExceptCurrentUser(getContext());
-        //Log.d("NEAR========", near.toString());
-        //Log.d("OTHERS========", others.toString());
+
         nearWorkerListView.updateWorkerList(near);
         workerListView.updateWorkerList(others);
+    }
+
+    public void onClickHireButton(User worker) {
+        Intent intent = new Intent(getContext(), RequestCleaningServiceActivity.class);
+        intent.putExtra("user_id", worker.getId());
+
+        startActivity(intent);
+    }
+
+    @Override
+    public void onClickViewDetailsButton(User worker) {
+        Intent intent = new Intent(getContext(), WorkerDetailsActivity.class);
+        intent.putExtra("user_id", worker.getId());
+
+        startActivity(intent);
     }
 
     /**
@@ -248,8 +263,8 @@ public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEv
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQUEST_GPS_CODE) {
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == REQUEST_GPS_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 useLocation();
             }
         }

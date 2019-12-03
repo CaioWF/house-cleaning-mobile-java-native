@@ -34,7 +34,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
     @Override
     protected void onStart() {
         super.onStart();
-        if (firebaseAuth.getCurrentUser() != null){
+        if (firebaseAuth.getCurrentUser() != null) {
             SessionUtil.setCurrentUserId(RegistrationActivity.this, firebaseAuth.getCurrentUser().getUid());
             Intent intent = new Intent(RegistrationActivity.this, HomeActivity.class);
             startActivity(intent);

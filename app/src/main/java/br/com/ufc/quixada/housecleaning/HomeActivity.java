@@ -47,8 +47,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser()==null)
-                {
+                if (firebaseAuth.getCurrentUser() == null) {
                     startActivity(new Intent(HomeActivity.this, LoginActivity.class));
                 }
             }
