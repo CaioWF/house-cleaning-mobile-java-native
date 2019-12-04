@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import br.com.ufc.quixada.housecleaning.R;
 import br.com.ufc.quixada.housecleaning.adapter.WorkerListAdapter;
 import br.com.ufc.quixada.housecleaning.transactions.User;
+import br.com.ufc.quixada.housecleaning.view.eventlistener.WorkerListViewEventListener;
 
 public class NearWorkerListView extends GenericView {
 
@@ -22,8 +23,12 @@ public class NearWorkerListView extends GenericView {
 
     private List<User> workers;
 
-    public NearWorkerListView() {
+    private WorkerListViewEventListener workerListViewEventListener;
+
+
+    public NearWorkerListView(WorkerListViewEventListener workerListViewEventListener) {
         workers = new ArrayList<>();
+        this.workerListViewEventListener = workerListViewEventListener;
     }
 
     @Override
@@ -37,7 +42,7 @@ public class NearWorkerListView extends GenericView {
         workerListLayoutManager = new LinearLayoutManager(rootView.getContext());
         workerListRecyclerView.setLayoutManager(workerListLayoutManager);
 
-        workerListAdapter = new WorkerListAdapter(workers);
+        workerListAdapter = new WorkerListAdapter(workers, workerListViewEventListener);
         workerListRecyclerView.setAdapter(workerListAdapter);
 
         if (workers.isEmpty()) {

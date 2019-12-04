@@ -112,7 +112,7 @@ public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEv
         place = new Place();
         openGPS();
 
-        nearWorkerListView = new NearWorkerListView();
+        nearWorkerListView = new NearWorkerListView(this);
         nearWorkerListView.initialize(view);
 
         workerListView = new WorkerListView(this);
