@@ -24,13 +24,16 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 
     private BottomNavigationView bottomNavigationView;
     private Toolbar toolbar;
+
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onStart() {
         super.onStart();
+
         firebaseAuth.addAuthStateListener(authStateListener);
+
         SessionUtil.setCurrentUserId(HomeActivity.this, firebaseAuth.getCurrentUser().getUid());
     }
 
@@ -77,8 +80,9 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 
             @Override
             public boolean onQueryTextChange(String s) {
-                WorkerListFragment a = (WorkerListFragment) getSupportFragmentManager().findFragmentById(R.id.id_fragment_container);
-                ((WorkerListAdapter) a.getWorkerListView().getWorkerListAdapter()).getFilter().filter(s);
+                WorkerListFragment workerListFragment = (WorkerListFragment) getSupportFragmentManager().findFragmentById(R.id.id_fragment_container);
+                ((WorkerListAdapter) workerListFragment.getWorkerListView().getWorkerListAdapter()).getFilter().filter(s);
+
                 return false;
             }
         });
@@ -120,6 +124,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         Fragment selectedFragment = null;
         String tag = "";
+
         switch (menuItem.getItemId()) {
             case R.id.id_bottom_home:
                 hideSearchButton();
@@ -168,5 +173,4 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     public void onFragmentInteraction(Uri uri) {
 
     }
-
 }

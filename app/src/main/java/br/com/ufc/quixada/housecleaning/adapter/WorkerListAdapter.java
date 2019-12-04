@@ -1,6 +1,5 @@
 package br.com.ufc.quixada.housecleaning.adapter;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.ufc.quixada.housecleaning.R;
-import br.com.ufc.quixada.housecleaning.RequestCleaningServiceActivity;
 import br.com.ufc.quixada.housecleaning.transactions.User;
 import br.com.ufc.quixada.housecleaning.view.eventlistener.WorkerListViewEventListener;
 

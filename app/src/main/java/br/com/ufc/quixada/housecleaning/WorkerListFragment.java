@@ -49,8 +49,10 @@ public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEv
     private OnFragmentInteractionListener mListener;
 
     private UserDAO userDAO;
+
     private NearWorkerListView nearWorkerListView;
     private WorkerListView workerListView;
+
     private LocationUtil locationUtil;
     private Place place;
 
@@ -109,10 +111,12 @@ public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEv
         });
 
         locationUtil = new LocationUtil(this);
+
         place = new Place();
+
         openGPS();
 
-        nearWorkerListView = new NearWorkerListView();
+        nearWorkerListView = new NearWorkerListView(this);
         nearWorkerListView.initialize(view);
 
         workerListView = new WorkerListView(this);
@@ -120,6 +124,7 @@ public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEv
 
         List<User> nearWorkers = getAllNearWorkersExceptCurrentUser(view.getContext());
         nearWorkerListView.updateWorkerList(nearWorkers);
+
         List<User> workers = getAllWorkersExceptCurrentUser(view.getContext());
         workerListView.updateWorkerList(workers);
 
@@ -130,26 +135,30 @@ public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEv
         List<User> workers = userDAO.findAllWorkers();
         List<User> toRemove = new ArrayList<>();
         String currentUserId = SessionUtil.getCurrentUserId(context);
+
         for (User worker : workers) {
-            if (worker.getId().equals(currentUserId) || !containsPLace(place, worker.getServicePlaces())) {
+            if (worker.getId().equals(currentUserId) || !containsPlace(place, worker.getServicePlaces())) {
                 toRemove.add(worker);
             }
         }
+
         workers.removeAll(toRemove);
 
         return workers;
     }
 
-    private boolean containsPLace(Place place1, List<Place> places) {
+    private boolean containsPlace(Place place1, List<Place> places) {
         if (place1.getCity() == null && place1.getNeighborhood() == null) {
             return false;
         }
+
         for (Place place : places) {
             if (place.getCity().equals(place1.getCity())
                     && place.getNeighborhood().equals(place1.getNeighborhood())) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -167,6 +176,7 @@ public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEv
         }
 
         workers.removeAll(toRemove);
+
         return workers;
     }
 
@@ -176,6 +186,7 @@ public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEv
                 return true;
             }
         }
+
         return false;
     }
 
@@ -214,6 +225,7 @@ public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEv
         workerListView.updateWorkerList(others);
     }
 
+    @Override
     public void onClickHireButton(User worker) {
         Intent intent = new Intent(getContext(), RequestCleaningServiceActivity.class);
         intent.putExtra("user_id", worker.getId());
@@ -248,7 +260,7 @@ public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEv
         return workerListView;
     }
 
-    public void openGPS() {
+    private void openGPS() {
         if (!locationUtil.checkGPSPermission(getActivity())) {
             locationUtil.requestGPSPermission(getActivity());
         } else {

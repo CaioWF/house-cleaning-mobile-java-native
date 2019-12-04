@@ -34,7 +34,6 @@ public class WorkerListView extends GenericView {
         super.initialize(rootView);
 
         workerListRecyclerView = rootView.findViewById(R.id.worker_list_recycler_view);
-        emptyView = rootView.findViewById(R.id.empty_view);
         workerListRecyclerView.setHasFixedSize(true);
 
         workerListLayoutManager = new LinearLayoutManager(rootView.getContext());
@@ -43,6 +42,7 @@ public class WorkerListView extends GenericView {
         workerListAdapter = new WorkerListAdapter(workers, workerListViewEventListener);
         workerListRecyclerView.setAdapter(workerListAdapter);
 
+        emptyView = rootView.findViewById(R.id.empty_view);
     }
 
     @Override
@@ -77,13 +77,7 @@ public class WorkerListView extends GenericView {
         }
 
         workers.add(worker);
-        if (workers.isEmpty()) {
-            workerListRecyclerView.setVisibility(View.GONE);
-            emptyView.setVisibility(View.VISIBLE);
-        } else {
-            workerListRecyclerView.setVisibility(View.VISIBLE);
-            emptyView.setVisibility(View.GONE);
-        }
+
         workerListAdapter.notifyDataSetChanged();
     }
 
