@@ -1,6 +1,5 @@
 package br.com.ufc.quixada.housecleaning.view;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -12,8 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import br.com.ufc.quixada.housecleaning.R;
 import br.com.ufc.quixada.housecleaning.adapter.WorkerListAdapter;
 import br.com.ufc.quixada.housecleaning.transactions.User;
+import br.com.ufc.quixada.housecleaning.view.eventlistener.WorkerListViewEventListener;
 
-public class NearWorkerListView extends GenericView {
+public class NearWorkerListView extends GenericView implements WorkerListViewEventListener {
 
     private RecyclerView workerListRecyclerView;
     private RecyclerView.Adapter workerListAdapter;
@@ -37,7 +37,7 @@ public class NearWorkerListView extends GenericView {
         workerListLayoutManager = new LinearLayoutManager(rootView.getContext());
         workerListRecyclerView.setLayoutManager(workerListLayoutManager);
 
-        workerListAdapter = new WorkerListAdapter(workers);
+        workerListAdapter = new WorkerListAdapter(workers, this);
         workerListRecyclerView.setAdapter(workerListAdapter);
 
         if (workers.isEmpty()) {
@@ -89,5 +89,15 @@ public class NearWorkerListView extends GenericView {
 
     public RecyclerView.Adapter getWorkerListAdapter() {
         return workerListAdapter;
+    }
+
+    @Override
+    public void onClickHireButton(User worker) {
+
+    }
+
+    @Override
+    public void onClickViewDetailsButton(User worker) {
+
     }
 }
