@@ -18,12 +18,12 @@ public class NearWorkerListView extends GenericView {
     private RecyclerView workerListRecyclerView;
     private RecyclerView.Adapter workerListAdapter;
     private RecyclerView.LayoutManager workerListLayoutManager;
-
     private TextView emptyView;
 
     private List<User> workers;
 
     private WorkerListViewEventListener workerListViewEventListener;
+
 
     public NearWorkerListView(WorkerListViewEventListener workerListViewEventListener) {
         workers = new ArrayList<>();
@@ -35,6 +35,7 @@ public class NearWorkerListView extends GenericView {
         super.initialize(rootView);
 
         workerListRecyclerView = rootView.findViewById(R.id.near_worker_list_recycler_view);
+        emptyView = rootView.findViewById(R.id.empty_view_near);
         workerListRecyclerView.setHasFixedSize(true);
 
         workerListLayoutManager = new LinearLayoutManager(rootView.getContext());
@@ -43,7 +44,13 @@ public class NearWorkerListView extends GenericView {
         workerListAdapter = new WorkerListAdapter(workers, workerListViewEventListener);
         workerListRecyclerView.setAdapter(workerListAdapter);
 
-        emptyView = rootView.findViewById(R.id.empty_view_near);
+        if (workers.isEmpty()) {
+            workerListRecyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            workerListRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -52,6 +59,27 @@ public class NearWorkerListView extends GenericView {
     }
 
     public void updateWorkerList(List<User> users) {
+        workers.clear();
+        workerListRecyclerView.setVisibility(View.VISIBLE);
+        for (User user : users) {
+            workers.add(user);
+        }
+
+        ((WorkerListAdapter) workerListAdapter).updateWorkersFull();
+
+        if (workers.isEmpty()) {
+            workerListRecyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            workerListRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
+        workerListAdapter.notifyDataSetChanged();
+    }
+
+    public void addWorkerToList(User worker) {
+        workers.add(worker);
+
         if (workers.isEmpty()) {
             workerListRecyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
@@ -60,29 +88,11 @@ public class NearWorkerListView extends GenericView {
             emptyView.setVisibility(View.GONE);
         }
 
-        workers.clear();
-
-        for (User user : users) {
-            workers.add(user);
-        }
-
-        ((WorkerListAdapter) workerListAdapter).updateWorkersFull();
-
-        workerListAdapter.notifyDataSetChanged();
-    }
-
-    public void addWorkerToList(User worker) {
-        if (workerListRecyclerView.getVisibility() == View.GONE) {
-            workerListRecyclerView.setVisibility(View.VISIBLE);
-            emptyView.setVisibility(View.GONE);
-        }
-
-        workers.add(worker);
-
         workerListAdapter.notifyDataSetChanged();
     }
 
     public RecyclerView.Adapter getWorkerListAdapter() {
         return workerListAdapter;
     }
+
 }

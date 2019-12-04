@@ -183,7 +183,9 @@ public class LoginActivity extends AppCompatActivity implements LoginViewEventLi
                             Log.d(TAG, "signInWithCredential:success");
                             Toast.makeText(LoginActivity.this, "Login com Google realizado!", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = firebaseAuth.getCurrentUser();
-                            userDAO.create(new User(user.getUid(), user.getDisplayName(), user.getEmail(), null));
+                            if (userDAO.findById(user.getUid()) == null) {
+                                userDAO.create(new User(user.getUid(), user.getDisplayName(), user.getEmail(), null));
+                            }
                             SessionUtil.setCurrentUserId(LoginActivity.this, user.getUid());
                             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             startActivity(intent);
