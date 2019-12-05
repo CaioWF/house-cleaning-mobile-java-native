@@ -102,7 +102,9 @@ public class LocationUtil {
     }
 
     public void finishUpdates() {
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+        if (fusedLocationProviderClient != null) {
+            fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+        }
     }
 
 }

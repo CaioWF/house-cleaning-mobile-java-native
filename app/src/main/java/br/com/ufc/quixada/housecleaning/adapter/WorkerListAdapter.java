@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +78,8 @@ public class WorkerListAdapter extends RecyclerView.Adapter<WorkerListAdapter.Wo
         }
 
         holder.workerName.setText(worker.getName());
-        holder.workerRate.setText(worker.getRating() + " ★");
+        NumberFormat rateFormat = new DecimalFormat("#.#");
+        holder.workerRate.setText(rateFormat.format(worker.getRating()) + " ★");
 
         holder.hireButton.setOnClickListener(new View.OnClickListener() {
             @Override
