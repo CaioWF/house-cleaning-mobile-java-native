@@ -109,6 +109,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.menu_logout:
                 Intent login = new Intent(getApplicationContext(), LoginActivity.class);
                 firebaseAuth.signOut();
+                SessionUtil.setCurrentUserId(this,null);
                 startActivity(login);
                 finish();
 

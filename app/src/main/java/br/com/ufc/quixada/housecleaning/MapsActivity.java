@@ -57,7 +57,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         coordinates = new LatLng(Double.parseDouble(getIntent().getExtras().get("lat").toString()), Double.parseDouble(getIntent().getExtras().get("lng").toString()));
         mMap.addMarker(new MarkerOptions().position(coordinates).title("Local do serviço"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(coordinates));
-        float zoomLevel = 20.0f;
+        float zoomLevel = 21.0f;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, zoomLevel));
     }
 

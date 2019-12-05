@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import br.com.ufc.quixada.housecleaning.dao.CleaningServiceDAO;
 import br.com.ufc.quixada.housecleaning.dao.firebase.CleaningServiceFirebaseDAO;
 import br.com.ufc.quixada.housecleaning.presenter.CleaningServiceEventListener;
+import br.com.ufc.quixada.housecleaning.transactions.Address;
 import br.com.ufc.quixada.housecleaning.transactions.CleaningService;
 import br.com.ufc.quixada.housecleaning.transactions.Place;
 import br.com.ufc.quixada.housecleaning.util.LocationUtil;
@@ -165,8 +166,8 @@ public class CleaningServiceSolicitationListFragment extends Fragment implements
     @Override
     public void onClickSeeOnMapSolicitation(CleaningService cleaningService) {
         LocationUtil locationUtil = new LocationUtil();
-        Place place = cleaningService.getAddress().getPlace();
-        LatLng latLng = locationUtil.getLatLngFromCityAndNeighborhood(getActivity(), place.getCity(), place.getNeighborhood());
+        Address address = cleaningService.getAddress();
+        LatLng latLng = locationUtil.getLatLngFromCityAndNeighborhood(getActivity(), address);
         if (latLng == null) {
             Toast.makeText(getActivity(), "Não foi possível ver a localização no mapa.", Toast.LENGTH_LONG).show();
         } else {

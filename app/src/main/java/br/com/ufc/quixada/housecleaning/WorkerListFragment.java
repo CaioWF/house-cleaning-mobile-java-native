@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -212,12 +213,12 @@ public class WorkerListFragment extends Fragment implements UpdateCurrentPlaceEv
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        locationUtil.finishUpdates();
     }
 
     @Override
     public void updatePlace(Place place) {
         this.place = place;
-
         List<User> near = getAllNearWorkersExceptCurrentUser(getContext());
         List<User> others = getAllWorkersExceptCurrentUser(getContext());
 
